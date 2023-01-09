@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# setup 'git root' shortcut for the root address of the repository
+git config --global alias.root 'rev-parse --show-toplevel'

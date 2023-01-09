@@ -1,0 +1,30 @@
+:root {
+  --numColumns: 5;
+}
+
+.hide {
+  display: none;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(var(--numColumns), 100px);
+}
+
+.grid-item {
+  width: 100px;
+  height: 100px;
+  border-style: solid;
+}
+
+.open-cell {
+  background-color: #ffffff;
+}
+
+.closed-cell {
+  background-color: #00003f;
+}
+
+.cell-path {
+  background-color: #ffbf00;
+}
