@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maze Solver</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer type="module" src="scripts.js"></script>
+</head>
+<body>
+  <!-- setup -->
+  <div id="setup-container">
+    <h3>Set grid dimensions</h3>
+
+    <label for="grid-rows">Number of rows</label>
+    <input type="number" name="grid-rows" id="grid-rows">
+
+    <br>
+    <label for="grid-columns">Number of columns</label>
+    <input type="number" name="grid-columns" id="grid-columns">
+
+    <br>
+    <button id="button-generate">Generate</button>
+  </div>
+  
+  <!-- maze solver -->
+  <div id="maze-solver-container" class="hide">
+    <!-- maze solver - grid -->
+    <div id="grid-container" class="grid-container"></div>
+    
+    <!-- maze solver - menu -->
+    <div id="menu">
+      <label for="start-row">start row</label>
+      <input type="number" name="start-row" id="start-row">
+      
+      <br>
+      <label for="start-column">start column</label>
+      <input type="number" name="start-column" id="start-column">
+    
+      <br>
+      <label for="finish-row">finish row</label>
+      <input type="number" name="finish-row" id="finish-row">
+    
+      <br>
+      <label for="finish-column">finish column</label>
+      <input type="number" name="finish-column" id="finish-column">
+    
+      <br>
+      <button id="button-solve">Solve</button>
+      <button id="button-reset">Reset</button>
+    </div>
+  </div>
+</body>
+</html>
