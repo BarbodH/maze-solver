@@ -38,56 +38,15 @@ const buttonReset = document.getElementById("button-reset");
 //////////////////// Event Listeners ////////////////////
 
 /**
- * Event listener for the solve button
- * @pre  document elements: correctly defined and point to their corresponding elements on the web page
- *       - 'maze' is an object representing the maze
- *       - 'buttonSolve'
- *       - 'gridContainer'
- *       utility functions: imported and preconditions are met
- *       - 'setLinearGrid'
- *       - 'convertListToMatrix'
- *       - 'markPath'
- * @post - menu input fields are disabled
- *       - appropriate object is returned
- *       - maze properties are updated: grid, start, finish
- * @returns - returns a 1D list representing the grid
- *          - 0 indicates open cell
- *          - 1 indicates closed cell
- */
-buttonSolve.addEventListener("click", () => {
-  // disable input fields
-  inputStartRow.disabled = true;
-  inputStartColumn.disabled = true;
-  inputFinishRow.disabled = true;
-  inputFinishColumn.disabled = true;
-  
-  // set up grid
-  const numColumns = inputGridColumns.value;
-  const numCells = gridContainer.childElementCount;
-  let grid = setLinearGrid(document, numCells); // obtain linear grid
-  grid = convertListToMatrix(grid, inputGridRows.value, numColumns); // convert linear grid to matrix
-
-  // update maze object
-  const startCoordinate = [parseInt(inputStartRow.value), parseInt(inputStartColumn.value)];
-  const finishCoordinate = [parseInt(inputFinishRow.value), parseInt(inputFinishColumn.value)];
-
-  maze.setGrid(grid);
-  maze.setStart(startCoordinate);
-  maze.setFinish(finishCoordinate);
-
-  // solve maze and mark path
-  const path = maze.solve();
-  markPath(document, path, numColumns);
-});
-
-/**
  * Event listener for the generate grid button
  * @pre  - document elements: correctly defined and point to their corresponding elements on the web page
- *       - 'root'
- *       - 'inputGridRows'
- *       - 'inputGridColumns'
- *       - 'gridContainer'
- * @post - enable and clear input fields
+ *        + 'root'
+ *        + 'inputGridRows'
+ *        + 'inputGridColumns'
+ *        + 'gridContainer'
+ *       - grid dimension entries are positive integers larger than 2
+ * @post - in case of invalid grid dimension entries, an alert is displayed to the user and no grid is generated
+ *       - enable and clear input fields
  *       - setup page is hided
  *       - maze solver grid and menu are unhided
  *       - grid is generated using 'inputGridRows' and 'inputGridColumns' input values
@@ -95,6 +54,16 @@ buttonSolve.addEventListener("click", () => {
  *       - grid cells are assigned event listeners for opening/closing upon click
  */
 buttonGenerate.addEventListener("click", () => {
+  // check input validity
+  const numRows = inputGridRows.value;
+  const numColumns = inputGridColumns.value;
+  if (numRows <= 0 || numColumns <= 0 // prohibit non-positive entries
+    || !Number.isInteger(+numRows) || !Number.isInteger(+numColumns) // prohibit non-integer entries
+    || numRows < 2 || numColumns < 2) { // prohibit entries smaller than 2
+    alert("ERROR!\nRow & column entries must be positive integers larger than 2.");
+    return;
+  }
+  
   // enable and clear input fields
   inputStartRow.disabled = false;
   inputStartRow.value = "";
@@ -109,8 +78,6 @@ buttonGenerate.addEventListener("click", () => {
   inputFinishColumn.value = "";
   
   // initialization
-  const numRows = inputGridRows.value;
-  const numColumns = inputGridColumns.value;
   const numCells = numRows * numColumns;
   root.style.setProperty("--numColumns", numColumns); // update grid layout number of columns
 
@@ -139,11 +106,60 @@ buttonGenerate.addEventListener("click", () => {
 });
 
 /**
+ * Event listener for the solve button
+ * @pre  - document elements: correctly defined and point to their corresponding elements on the web page
+ *        + 'maze' is an object representing the maze
+ *        + 'buttonSolve'
+ *        + 'gridContainer'
+ *       - utility functions: imported and preconditions are met
+ *        + 'setLinearGrid'
+ *        + 'convertListToMatrix'
+ *        + 'markPath'
+ * @post - menu input fields are disabled
+ *       - appropriate object is returned
+ *       - maze properties are updated: grid, start, finish
+ * @returns - returns a 1D list representing the grid
+ *          - 0 indicates open cell
+ *          - 1 indicates closed cell
+ */
+buttonSolve.addEventListener("click", () => {
+  try {
+    // set up grid
+    // 'var' declaration is used for 'numColumns' for function scoping (required for 'markPath()' outside of try-catch block)
+    var numColumns = inputGridColumns.value;
+    const numCells = gridContainer.childElementCount;
+    let grid = setLinearGrid(document, numCells); // obtain linear grid
+    grid = convertListToMatrix(grid, inputGridRows.value, numColumns); // convert linear grid to matrix
+
+    // update maze object
+    const startCoordinate = [parseInt(inputStartRow.value), parseInt(inputStartColumn.value)];
+    const finishCoordinate = [parseInt(inputFinishRow.value), parseInt(inputFinishColumn.value)];
+
+    maze.setGrid(grid);
+    maze.setStart(startCoordinate);
+    maze.setFinish(finishCoordinate);
+  } catch (error) {
+    alert("ERROR!\nStart & finish entries must be positive integers within the grid.");
+    return;
+  }
+
+  // disable input fields
+  inputStartRow.disabled = true;
+  inputStartColumn.disabled = true;
+  inputFinishRow.disabled = true;
+  inputFinishColumn.disabled = true;
+
+  // solve maze and mark path
+  const path = maze.solve();
+  markPath(document, path, numColumns);
+});
+
+/**
  * Event listener for the reset grid button
- * @pre  document elements: correctly defined and point to their corresponding elements on the web page
- *       - 'gridContainer'
- *       - 'solveMazeContainer'
- *       - 'setupContainer'
+ * @pre  - document elements: correctly defined and point to their corresponding elements on the web page
+ *        + 'gridContainer'
+ *        + 'solveMazeContainer'
+ *        + 'setupContainer'
  * @post - setup page is unhided
  *       - maze solver grid and menu are hided
  * Note: postconditions are the opposite of 'buttonGenerate' even listener
