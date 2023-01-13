@@ -74,3 +74,5 @@ export const markPath = (document, path, numColumns) => {
     cell.classList.add("cell-path");
   }
 }
+
+
