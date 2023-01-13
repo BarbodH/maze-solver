@@ -73,6 +73,19 @@ export const markPath = (document, path, numColumns) => {
     cell.classList.remove("open-cell");
     cell.classList.add("cell-path");
   }
+
+  //marks the start of the path
+  let index = path[0][0] * numColumns + path[0][1];
+  const startCell = document.getElementById("cell-" + index);
+  startCell.classList.remove("open-cell");
+  startCell.classList.add("cell-start");
+
+  //marks the end of the path
+  index = path[path.length - 1][0] * numColumns + path[path.length - 1][1];
+  const endCell = document.getElementById("cell-" + index);
+  endCell.classList.remove("open-cell");
+  endCell.classList.add("cell-end");
+
 }
 
 
