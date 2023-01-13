@@ -39,3 +39,104 @@
 .cell-path {
   background-color: #ffbf00;
 }
+
+/*------------------------------------------------------------*/
+
+body{
+  background-color: #F0FFFF;
+}
+
+input{
+  width: 343px;
+  height: 80px;
+
+  background: #FCFCFC;
+  opacity: 0.5;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.25), inset -4px -4px 4px #EAEAEA;
+  border-radius: 30px;
+
+  text-align: center;
+  font-size: 42px;
+}
+
+input:focus{
+  outline: none;
+}
+
+.button-generate{
+  width: 355px;
+  height: 80px;
+
+  background: linear-gradient(98.31deg, #00C88C 31.83%, #01A86C 74.93%);
+  mix-blend-mode: normal;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  text-align: center;
+  font-size: 40px;
+  border: none;
+  color: white;
+
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  
+}
+
+.button-generate:hover{
+  opacity: 80%;
+}
+
+.button-solve{
+  width: 177px;
+  height: 80px;
+
+  background: linear-gradient(98.31deg, #00C88C 31.83%, #01A86C 74.93%);
+  mix-blend-mode: normal;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  text-align: center;
+  font-size: 40px;
+  border: none;
+  color: white;
+
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  
+}
+
+.button-solve:hover{
+  opacity: 80%;
+}
+
+.button-reset{
+  width: 177px;
+  height: 80px;
+
+  background: linear-gradient(98.31deg, #C80000 31.83%, #950808 74.93%);
+  mix-blend-mode: normal;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  text-align: center;
+  font-size: 40px;
+  border: none;
+  color: white;
+
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  
+}
+
+.button-reset:hover{
+  opacity: 80%;
+}
+
+
