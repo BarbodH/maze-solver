@@ -1,19 +1,30 @@
 :root {
   --numColumns: 5;
+  --cellSideLength: 10px;
+  --gridSideLength: 400px;
 }
 
 .hide {
   display: none;
 }
 
+.grid-outer-container {
+  display: flex;
+  height: var(--gridSideLength);
+  width: var(--gridSideLength);
+  align-items: center;
+  justify-content: center;
+  border: solid;
+  border-color: silver;
+}
+
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(var(--numColumns), 100px);
+  grid-template-columns: repeat(var(--numColumns), var(--cellSideLength));
 }
 
 .grid-item {
-  width: 100px;
-  height: 100px;
+  height: var(--cellSideLength);
   border-style: solid;
 }
 
