@@ -29,15 +29,23 @@
 }
 
 .open-cell {
-  background-color: #ffffff;
+  background-color: #FCFCFC;
 }
 
 .closed-cell {
-  background-color: #00003f;
+  background-color: #828487;
 }
 
 .cell-path {
-  background-color: #ffbf00;
+  background-color: #FDFF92;
+}
+
+.cell-start{
+  background-color: #FFB292;
+}
+
+.cell-end{
+  background-color: #E874CE;
 }
 
 /*------------------------------------------------------------*/
