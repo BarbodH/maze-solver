@@ -62,6 +62,9 @@ buttonGenerate.addEventListener("click", () => {
     || numRows < 2 || numColumns < 2) { // prohibit entries smaller than 2
     alert("ERROR!\nRow & column entries must be positive integers larger than 2.");
     return;
+  } else if (numRows >= 30 || numColumns >= 30) {
+    alert("ERROR!\nNumber of rows or columns cannot exceed 30.");
+    return;
   }
   
   // enable and clear input fields
@@ -80,6 +83,9 @@ buttonGenerate.addEventListener("click", () => {
   // initialization
   const numCells = numRows * numColumns;
   root.style.setProperty("--numColumns", numColumns); // update grid layout number of columns
+  const gridSideLength = parseInt(getComputedStyle(root).getPropertyValue("--gridSideLength"));
+  const largestDivisor = +numRows > +numColumns ? numRows : numColumns;
+  root.style.setProperty("--cellSideLength", gridSideLength / largestDivisor + "px");
 
   // dynamically fill out the grid
   for (let i = 0; i < numCells; i++) {
