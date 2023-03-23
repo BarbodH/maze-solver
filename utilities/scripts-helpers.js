@@ -66,12 +66,14 @@ export const convertListToMatrix = (list, numRows, numColumns) => {
  *       - an error is thrown in case of invalid 'path' or 'numColumns'
  *       - there is no precondition checking for 'document'; the developer must ensure input validity
  */
-export const markPath = (document, path, numColumns) => {
+export const markPath = async (document, path, numColumns, mode) => {
+  const DELAY_MILLISECONDS = 100;
   for (let i = 0; i < path.length; i++) {
     let index = path[i][0] * numColumns + path[i][1];
     const cell = document.getElementById("cell-" + index);
     cell.classList.remove("open-cell");
     cell.classList.add("cell-path");
+    await pause(DELAY_MILLISECONDS);
   }
 
   //marks the start of the path
@@ -85,7 +87,13 @@ export const markPath = (document, path, numColumns) => {
   const endCell = document.getElementById("cell-" + index);
   endCell.classList.remove("open-cell");
   endCell.classList.add("cell-end");
-
 }
 
-
+/**
+ * Helper function for markPath to pause and create a sequential effect
+ * @param {Number} delayMilliseconds 
+ * @returns promise which is resolved after the specified duration (delayMilliseconds)
+ */
+const pause = (delayMilliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, delayMilliseconds));
+} 
