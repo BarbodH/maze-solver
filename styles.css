@@ -2,59 +2,71 @@
   --numColumns: 5;
   --cellSideLength: 10px;
   --gridSideLength: 400px;
+  --num-maze-columns: 5;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .hide {
   display: none;
 }
 
-.grid-outer-container {
+.container {
   display: flex;
-  height: var(--gridSideLength);
-  width: var(--gridSideLength);
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
-  border: solid;
-  border-color: silver;
+  height: 100%;
 }
 
-.grid-container {
+.menu-container {
+  min-width: 300px;
+}
+
+.maze-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.maze {
   display: grid;
-  grid-template-columns: repeat(var(--numColumns), var(--cellSideLength));
+  grid-template-columns: repeat(var(--num-maze-columns), 1fr);
 }
 
-.grid-item {
-  height: var(--cellSideLength);
-  border-style: solid;
+.maze-cell {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #A9A9A9;
 }
 
-.open-cell {
-  background-color: #FCFCFC;
+.maze-cell-open {
+  background-color: #F8F8FF;
 }
 
-.closed-cell {
-  background-color: #828487;
+.maze-cell-closed {
+  background-color: #00003F;
 }
 
-.cell-path {
-  background-color: #FDFF92;
+.maze-cell-start {
+  background-color: #00C88C;
 }
 
-.cell-start{
-  background-color: #FFB292;
-}
-
-.cell-end{
-  background-color: #E874CE;
+.maze-cell-finish {
+  background-color: #D70040;
 }
 
 /*------------------------------------------------------------*/
 
-body{
+body {
   background-color: #F0FFFF;
 }
 
-input{
+input {
   width: 343px;
   height: 80px;
 
