@@ -7,6 +7,21 @@ import { markPath } from "./utilities/scripts-helpers.js";
 
 const root = document.documentElement;
 
+// global variables/constants
+const GRID_ITEM_SIDE_LENGTH = 25;
+let numItems = 0;
+
+// maze setup
+const visualizeContainerMaze = document.getElementById("visualize-container-maze");
+const visualizeMaze = document.getElementById("visualize-maze");
+
+// menu
+const visualizeButtonClearPath = document.getElementById("visualize-button-clear-path");
+const visualizeButtonClearMaze = document.getElementById("visualize-button-clear-maze");
+const visualizeButtonGenerateMaze = document.getElementById("visualize-button-generate-maze");
+const visualizeButtonSolve = document.getElementById("visualize-button-solve");
+
+
 // arbitrary maze setup
 let start = [0, 0];
 let finish = [0, 0];
@@ -35,7 +50,77 @@ const inputFinishColumn = document.getElementById("finish-column");
 const buttonSolve = document.getElementById("button-solve");
 const buttonReset = document.getElementById("button-reset");
 
+//////////////////// Maze Setup ////////////////////
+
+const setupMaze = () => {
+  const containerWidth = visualizeContainerMaze.getBoundingClientRect().width;
+  const containerHeight = visualizeContainerMaze.getBoundingClientRect().height;
+  
+  const numItemsWidth = Math.floor(containerWidth / GRID_ITEM_SIDE_LENGTH);
+  const numItemsHeight = Math.floor(containerHeight / GRID_ITEM_SIDE_LENGTH);
+
+  root.style.setProperty("--num-maze-columns", numItemsWidth.toString());
+
+  numItems = numItemsWidth * numItemsHeight;
+  const indexStart = indicateStart(numItemsWidth, numItemsHeight);
+  const indexFinish = indicateFinish(numItemsWidth, numItemsHeight);
+  for (let i = 0; i < numItems; i++) {
+    let newCell = document.createElement("button");
+    
+    if (i == indexStart) newCell.classList.add("maze-cell", "maze-cell-start")
+    else if (i == indexFinish) newCell.classList.add("maze-cell", "maze-cell-finish");
+    else newCell.classList.add("maze-cell", "maze-cell-open");
+
+    newCell.setAttribute("id", `cell-${i}`)
+    newCell.addEventListener("click", () => {
+      // handle box click logic
+    });
+
+    visualizeMaze.appendChild(newCell);
+  }
+}
+
+const indicateStart = (numItemsWidth, numItemsHeight) => {
+  return Math.floor(numItemsWidth / 5) + Math.floor(numItemsHeight / 2) * numItemsWidth;
+};
+
+const indicateFinish = (numItemsWidth, numItemsHeight) => {
+  return Math.floor(numItemsWidth * 4 / 5) + Math.floor(numItemsHeight / 2) * numItemsWidth;
+}
+
+//////////////////// Utility Functions ////////////////////
+
+const clearMaze = () => {
+  for (let i = 0; i < numItems; i++) {
+    let currentCell = document.getElementById(`cell-${i}`);
+    if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-start")) {
+      currentCell.classList.remove("maze-cell-closed");
+      currentCell.classList.add("maze-cell-open");
+    }
+  }
+};
+
 //////////////////// Event Listeners ////////////////////
+
+visualizeButtonClearMaze.addEventListener("click", () => {
+  clearMaze();
+});
+
+visualizeButtonGenerateMaze.addEventListener("click", () => {
+  clearMaze();
+  for (let i = 0; i < numItems; i++) {
+    let currentCell = document.getElementById(`cell-${i}`);
+    let indicator = Math.random();
+    if (indicator < 0.3) {
+      if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-start")) {
+        currentCell.classList.remove("maze-cell-open");
+        currentCell.classList.add("maze-cell-closed");
+      }
+    }
+  }
+});
+
+
 
 /**
  * Event listener for the generate grid button
@@ -52,7 +137,7 @@ const buttonReset = document.getElementById("button-reset");
  *       - grid is generated using 'inputGridRows' and 'inputGridColumns' input values
  *       - grid cells are assigned IDs "cell-i", with 'i' corresponding to their index
  *       - grid cells are assigned event listeners for opening/closing upon click
- */
+ */ /*
 buttonGenerate.addEventListener("click", () => {
   // check input validity
   const numRows = inputGridRows.value;
@@ -109,7 +194,7 @@ buttonGenerate.addEventListener("click", () => {
 
   setupContainer.classList.add("hide");
   mazeSolverContainer.classList.remove("hide");
-});
+}); */
 
 /**
  * Event listener for the solve button
@@ -127,7 +212,7 @@ buttonGenerate.addEventListener("click", () => {
  * @returns - returns a 1D list representing the grid
  *          - 0 indicates open cell
  *          - 1 indicates closed cell
- */
+ */ /*
 buttonSolve.addEventListener("click", () => {
   try {
     // set up grid
@@ -158,7 +243,7 @@ buttonSolve.addEventListener("click", () => {
   // solve maze and mark path
   const path = maze.solve();
   markPath(document, path, numColumns);
-});
+}); */
 
 /**
  * Event listener for the reset grid button
@@ -169,9 +254,10 @@ buttonSolve.addEventListener("click", () => {
  * @post - setup page is unhided
  *       - maze solver grid and menu are hided
  * Note: postconditions are the opposite of 'buttonGenerate' even listener
- */
+ */ /*
 buttonReset.addEventListener("click", () => {
   gridContainer.innerHTML = ""; // clear grid cells (children)
   mazeSolverContainer.classList.add("hide");
   setupContainer.classList.remove("hide");
-});
+}); */
+setupMaze();
