@@ -2,16 +2,22 @@ import Maze from "./maze-solver/maze.js";
 import { setLinearGrid } from "./utilities/scripts-helpers.js";
 import { convertListToMatrix } from "./utilities/scripts-helpers.js";
 import { markPath } from "./utilities/scripts-helpers.js";
+import { clearPath } from "./utilities/scripts-helpers.js";
+import { clearMaze } from "./utilities/scripts-helpers.js";
+import { generateMaze } from "./utilities/scripts-helpers.js";
+import { indicateStart } from "./utilities/scripts-helpers.js";
+import { indicateFinish } from "./utilities/scripts-helpers.js";
 
 //////////////////// Element Initializations ////////////////////
 
 const root = document.documentElement;
 
-// global variables/constants
-const GRID_ITEM_SIDE_LENGTH = 25;
-let numItems = 0;
-let numItemsWidth = 0;
-let numItemsHeight = 0;
+// global constants
+// variables initialized with 'let' will later be frozen when the maze is set up
+const MAZE_CELL_SIDE_LENGTH = 25;
+let numCells;
+let numCellsWidth;
+let numCellsHeight;
 
 // maze setup
 const visualizeContainerMaze = document.getElementById("visualize-container-maze");
@@ -31,25 +37,43 @@ const maze = new Maze(grid, start, finish);
 
 //////////////////// Maze Setup ////////////////////
 
+/**
+ * Initializes the maze grid based on screen dimensions and maze cell side length.
+ */
 const setupMaze = () => {
+  // retrieve current screen's dimensions
   const containerWidth = visualizeContainerMaze.getBoundingClientRect().width;
   const containerHeight = visualizeContainerMaze.getBoundingClientRect().height;
   
-  numItemsWidth = Math.floor(containerWidth / GRID_ITEM_SIDE_LENGTH);
-  numItemsHeight = Math.floor(containerHeight / GRID_ITEM_SIDE_LENGTH);
+  // calculate the number of cells for screen height & width based on cell side length
+  numCellsWidth = Math.floor(containerWidth / MAZE_CELL_SIDE_LENGTH);
+  numCellsHeight = Math.floor(containerHeight / MAZE_CELL_SIDE_LENGTH);
+  numCells = numCellsWidth * numCellsHeight;
+  // freeze variables into constants to prevent further modification
+  Object.freeze({ numCells, numCellsWidth, numCellsHeight });
 
-  root.style.setProperty("--num-maze-columns", numItemsWidth.toString());
+  // set the number of columns for the grid view containing the maze
+  root.style.setProperty("--num-maze-columns", numCellsWidth.toString());
 
-  numItems = numItemsWidth * numItemsHeight;
-  const indexStart = indicateStart(numItemsWidth, numItemsHeight);
-  const indexFinish = indicateFinish(numItemsWidth, numItemsHeight);
-  for (let i = 0; i < numItems; i++) {
+  // indicate start & finish points based on screen dimensions
+  // by default, the points are aligned horizontally (1/2 height of screen)
+  // by default, the points are 1/5 of total width away from their respectiv edge
+  // start: left, finish: right
+  const indexStart = indicateStart(numCellsWidth, numCellsHeight, start);
+  const indexFinish = indicateFinish(numCellsWidth, numCellsHeight, finish);
+  
+  // create cells (HTML buttons) and fill out the maze grid
+  for (let i = 0; i < numCells; i++) {
     let newCell = document.createElement("button");
     
+    // assign maze-cell-open classes to all cells, except for start and finish
+    // start cell class: maze-cell-start, finish cell class: maze-cell-finish
     if (i == indexStart) newCell.classList.add("maze-cell", "maze-cell-start")
     else if (i == indexFinish) newCell.classList.add("maze-cell", "maze-cell-finish");
     else newCell.classList.add("maze-cell", "maze-cell-open");
 
+    // assign ID and add event listener to each listener to handle user clicking
+    // click behaviour: (open -> closed), (closed -> open)
     newCell.setAttribute("id", `cell-${i}`)
     newCell.addEventListener("click", () => {
       if (newCell.classList.contains("maze-cell-open")) {
@@ -65,72 +89,36 @@ const setupMaze = () => {
   }
 }
 
-const indicateStart = (numItemsWidth, numItemsHeight) => {
-  start[0] = Math.floor(numItemsHeight / 2);
-  start[1] = Math.floor(numItemsWidth / 5);
-  return start[1] + start[0] * numItemsWidth;
-};
-
-const indicateFinish = (numItemsWidth, numItemsHeight) => {
-  finish[0] = Math.floor(numItemsHeight / 2);
-  finish[1] = Math.floor(numItemsWidth * 4 / 5);
-  return finish[1] + finish[0] * numItemsWidth;
-};
-
-//////////////////// Utility Functions ////////////////////
-
-const clearPath = () => {
-  for (let i = 0; i < numItems; i++) {
-    let currentCell = document.getElementById(`cell-${i}`);
-    if (currentCell.classList.contains("maze-cell-path")) {
-      currentCell.classList.remove("maze-cell-path");
-      currentCell.classList.add("maze-cell-open");
-    }
-  }
-}
-
-const clearMaze = () => {
-  for (let i = 0; i < numItems; i++) {
-    let currentCell = document.getElementById(`cell-${i}`);
-    if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-finish")) {
-      currentCell.classList.remove("maze-cell-closed");
-      currentCell.classList.remove("maze-cell-path");
-      currentCell.classList.add("maze-cell-open");
-    }
-  }
-};
-
-const generateMaze = () => {
-  clearMaze();
-  for (let i = 0; i < numItems; i++) {
-    let currentCell = document.getElementById(`cell-${i}`);
-    let indicator = Math.random();
-    if (indicator < 0.3) {
-      if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-finish")) {
-        currentCell.classList.remove("maze-cell-open");
-        currentCell.classList.add("maze-cell-closed");
-      }
-    }
-  }
-};
-
 //////////////////// Event Listeners ////////////////////
 
+/**
+ * Event listener for the 'Clear Path' button.
+ */
 visualizeButtonClearPath.addEventListener("click", () => {
-  clearPath();
+  clearPath(document, numCells);
 });
 
+/**
+ * Event listener for the 'Clear Maze' button
+ */
 visualizeButtonClearMaze.addEventListener("click", () => {
-  clearMaze();
+  clearMaze(document, numCells);
 });
 
+/**
+ * Event listener for the 'Generate Maze' button
+ */
 visualizeButtonGenerateMaze.addEventListener("click", () => {
-  generateMaze();
+  generateMaze(document, numCells);
 });
 
+/**
+ * Event listener for the 'Solve' button.
+ * Updates the <code>maze</code>, retrieves the solution, and marks the path on the maze.
+ */
 visualizeButtonSolve.addEventListener("click", () => {
-  let grid = setLinearGrid(document, numItems); // obtain linear grid
-  grid = convertListToMatrix(grid, numItemsHeight, numItemsWidth); // convert linear grid to matrix
+  let grid = setLinearGrid(document, numCells); // obtain linear grid
+  grid = convertListToMatrix(grid, numCellsHeight, numCellsWidth); // convert linear grid to matrix
   
   // update maze object
   maze.setGrid(grid);
@@ -138,7 +126,7 @@ visualizeButtonSolve.addEventListener("click", () => {
   maze.setFinish(finish);
 
   const path = maze.solve();
-  markPath(document, path, numItemsWidth);
+  markPath(document, path, numCellsWidth);
 });
 
 //////////////////// Page Load ////////////////////

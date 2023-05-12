@@ -66,11 +66,10 @@ export const convertListToMatrix = (list, numRows, numColumns) => {
  *       - an error is thrown in case of invalid 'path' or 'numColumns'
  *       - there is no precondition checking for 'document'; the developer must ensure input validity
  */
-export const markPath = async (document, path, numColumns, mode) => {
+export const markPath = async (document, path, numColumns) => {
   const DELAY_MILLISECONDS = 50;
   for (let i = 0; i < path.length; i++) {
     let index = path[i][0] * numColumns + path[i][1];
-    console.log(index);
     const cell = document.getElementById(`cell-${index}`);
     if (!cell.classList.contains("maze-cell-start") && !cell.classList.contains("maze-cell-finish")) {
       cell.classList.remove("maze-cell-open");
@@ -87,4 +86,83 @@ export const markPath = async (document, path, numColumns, mode) => {
  */
 const pause = (delayMilliseconds) => {
   return new Promise(resolve => setTimeout(resolve, delayMilliseconds));
-} 
+}
+
+/**
+ * Determines the coordinate of the default starting point based on the maze dimensions.
+ * The coordinate is 1/2 of the height and 1/5 of the width.
+ * @param {Number} numCellsWidth 
+ * @param {Number} numCellsHeight 
+ * @param {Number[]} start * modifying global variable
+ * @returns index corresponding to the indicated coordinate for starting point.
+ */
+export const indicateStart = (numCellsWidth, numCellsHeight, start) => {
+  start[0] = Math.floor(numCellsHeight / 2);
+  start[1] = Math.floor(numCellsWidth / 5);
+  return start[1] + start[0] * numCellsWidth;
+};
+
+/**
+ * Determines the coordinate of the default finish point based on the maze dimensions.
+ * The coordinate is 1/2 of the height and 4/5 of the width.
+ * @param {Number} numCellsWidth 
+ * @param {Number} numCellsHeight 
+ * @param {Number[]} finish * modifying global variable
+ * @returns 
+ */
+export const indicateFinish = (numCellsWidth, numCellsHeight, finish) => {
+  finish[0] = Math.floor(numCellsHeight / 2);
+  finish[1] = Math.floor(numCellsWidth * 4 / 5);
+  return finish[1] + finish[0] * numCellsWidth;
+};
+
+/**
+ * Clears the solution path after the maze is solved. The maze itself remains intact.
+ * @param {Object[]} document * modifying UI
+ * @param {Number} numCells 
+ */
+export const clearPath = (document, numCells) => {
+  for (let i = 0; i < numCells; i++) {
+    let currentCell = document.getElementById(`cell-${i}`);
+    if (currentCell.classList.contains("maze-cell-path")) {
+      currentCell.classList.remove("maze-cell-path");
+      currentCell.classList.add("maze-cell-open");
+    }
+  }
+};
+
+/**
+ * Clears the entire maze, including the solution path.
+ * @param {Object[]} document * modifying UI
+ * @param {Number} numCells 
+ */
+export const clearMaze = (document, numCells) => {
+  for (let i = 0; i < numCells; i++) {
+    let currentCell = document.getElementById(`cell-${i}`);
+    if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-finish")) {
+      currentCell.classList.remove("maze-cell-closed");
+      currentCell.classList.remove("maze-cell-path");
+      currentCell.classList.add("maze-cell-open");
+    }
+  }
+};
+
+/**
+ * Clears the entire maze, including the solution path, and generates a new maze.
+ * Open & closed cells are set with a 7:3 ratio.
+ * @param {Object[]} document * modifying the UI
+ * @param {Number} numCells 
+ */
+export const generateMaze = (document, numCells) => {
+  clearMaze(document, numCells);
+  for (let i = 0; i < numCells; i++) {
+    let currentCell = document.getElementById(`cell-${i}`);
+    let indicator = Math.random();
+    if (indicator < 0.3) {
+      if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-finish")) {
+        currentCell.classList.remove("maze-cell-open");
+        currentCell.classList.add("maze-cell-closed");
+      }
+    }
+  }
+};
