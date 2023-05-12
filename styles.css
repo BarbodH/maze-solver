@@ -60,6 +60,10 @@ html, body {
   background-color: #D70040;
 }
 
+.maze-cell-path {
+  background-color: #FFBF00;
+}
+
 /*------------------------------------------------------------*/
 
 body {

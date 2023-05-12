@@ -10,6 +10,8 @@ const root = document.documentElement;
 // global variables/constants
 const GRID_ITEM_SIDE_LENGTH = 25;
 let numItems = 0;
+let numItemsWidth = 0;
+let numItemsHeight = 0;
 
 // maze setup
 const visualizeContainerMaze = document.getElementById("visualize-container-maze");
@@ -21,34 +23,11 @@ const visualizeButtonClearMaze = document.getElementById("visualize-button-clear
 const visualizeButtonGenerateMaze = document.getElementById("visualize-button-generate-maze");
 const visualizeButtonSolve = document.getElementById("visualize-button-solve");
 
-
 // arbitrary maze setup
 let start = [0, 0];
 let finish = [0, 0];
 let grid = [[0, 0], [0, 0]];
 const maze = new Maze(grid, start, finish);
-
-// main containers
-const setupContainer = document.getElementById("setup-container");
-const mazeSolverContainer = document.getElementById("maze-solver-container");
-
-// setup elements
-const inputGridRows = document.getElementById("grid-rows");
-const inputGridColumns = document.getElementById("grid-columns");
-
-const buttonGenerate = document.getElementById("button-generate");
-
-// maze solver elements - grid
-const gridContainer = document.getElementById("grid-container");
-
-// maze solver elements - menu
-const inputStartRow = document.getElementById("start-row");
-const inputStartColumn = document.getElementById("start-column");
-const inputFinishRow = document.getElementById("finish-row");
-const inputFinishColumn = document.getElementById("finish-column");
-
-const buttonSolve = document.getElementById("button-solve");
-const buttonReset = document.getElementById("button-reset");
 
 //////////////////// Maze Setup ////////////////////
 
@@ -56,8 +35,8 @@ const setupMaze = () => {
   const containerWidth = visualizeContainerMaze.getBoundingClientRect().width;
   const containerHeight = visualizeContainerMaze.getBoundingClientRect().height;
   
-  const numItemsWidth = Math.floor(containerWidth / GRID_ITEM_SIDE_LENGTH);
-  const numItemsHeight = Math.floor(containerHeight / GRID_ITEM_SIDE_LENGTH);
+  numItemsWidth = Math.floor(containerWidth / GRID_ITEM_SIDE_LENGTH);
+  numItemsHeight = Math.floor(containerHeight / GRID_ITEM_SIDE_LENGTH);
 
   root.style.setProperty("--num-maze-columns", numItemsWidth.toString());
 
@@ -81,26 +60,45 @@ const setupMaze = () => {
 }
 
 const indicateStart = (numItemsWidth, numItemsHeight) => {
-  return Math.floor(numItemsWidth / 5) + Math.floor(numItemsHeight / 2) * numItemsWidth;
+  start[0] = Math.floor(numItemsHeight / 2);
+  start[1] = Math.floor(numItemsWidth / 5);
+  return start[1] + start[0] * numItemsWidth;
 };
 
 const indicateFinish = (numItemsWidth, numItemsHeight) => {
-  return Math.floor(numItemsWidth * 4 / 5) + Math.floor(numItemsHeight / 2) * numItemsWidth;
-}
+  finish[0] = Math.floor(numItemsHeight / 2);
+  finish[1] = Math.floor(numItemsWidth * 4 / 5);
+  return finish[1] + finish[0] * numItemsWidth;
+};
 
 //////////////////// Utility Functions ////////////////////
+
+const clearPath = () => {
+  for (let i = 0; i < numItems; i++) {
+    let currentCell = document.getElementById(`cell-${i}`);
+    if (currentCell.classList.contains("maze-cell-path")) {
+      currentCell.classList.remove("maze-cell-path");
+      currentCell.classList.add("maze-cell-open");
+    }
+  }
+}
 
 const clearMaze = () => {
   for (let i = 0; i < numItems; i++) {
     let currentCell = document.getElementById(`cell-${i}`);
-    if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-start")) {
+    if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-finish")) {
       currentCell.classList.remove("maze-cell-closed");
+      currentCell.classList.remove("maze-cell-path");
       currentCell.classList.add("maze-cell-open");
     }
   }
 };
 
 //////////////////// Event Listeners ////////////////////
+
+visualizeButtonClearPath.addEventListener("click", () => {
+  clearPath();
+});
 
 visualizeButtonClearMaze.addEventListener("click", () => {
   clearMaze();
@@ -112,7 +110,7 @@ visualizeButtonGenerateMaze.addEventListener("click", () => {
     let currentCell = document.getElementById(`cell-${i}`);
     let indicator = Math.random();
     if (indicator < 0.3) {
-      if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-start")) {
+      if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-finish")) {
         currentCell.classList.remove("maze-cell-open");
         currentCell.classList.add("maze-cell-closed");
       }
@@ -120,6 +118,18 @@ visualizeButtonGenerateMaze.addEventListener("click", () => {
   }
 });
 
+visualizeButtonSolve.addEventListener("click", () => {
+  let grid = setLinearGrid(document, numItems); // obtain linear grid
+  grid = convertListToMatrix(grid, numItemsHeight, numItemsWidth); // convert linear grid to matrix
+  
+  // update maze object
+  maze.setGrid(grid);
+  maze.setStart(start);
+  maze.setFinish(finish);
+
+  const path = maze.solve();
+  markPath(document, path, numItemsWidth);
+});
 
 
 /**
