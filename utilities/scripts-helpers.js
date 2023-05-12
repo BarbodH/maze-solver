@@ -18,8 +18,8 @@ export const setLinearGrid = (document, numCells) => {
   const linearGrid = [];
 
   for (let i = 0; i < numCells; i++) {
-    const cell = document.getElementById("cell-" + i);
-    const cellBinary = cell.classList.contains("open-cell") ? 0 : 1;
+    const cell = document.getElementById(`cell-${i}`);
+    const cellBinary = cell.classList.contains("maze-cell-closed") ? 1 : 0;
     linearGrid.push(cellBinary);
   }
 
@@ -67,26 +67,17 @@ export const convertListToMatrix = (list, numRows, numColumns) => {
  *       - there is no precondition checking for 'document'; the developer must ensure input validity
  */
 export const markPath = async (document, path, numColumns, mode) => {
-  const DELAY_MILLISECONDS = 100;
+  const DELAY_MILLISECONDS = 50;
   for (let i = 0; i < path.length; i++) {
     let index = path[i][0] * numColumns + path[i][1];
-    const cell = document.getElementById("cell-" + index);
-    cell.classList.remove("open-cell");
-    cell.classList.add("cell-path");
-    await pause(DELAY_MILLISECONDS);
+    console.log(index);
+    const cell = document.getElementById(`cell-${index}`);
+    if (!cell.classList.contains("maze-cell-start") && !cell.classList.contains("maze-cell-finish")) {
+      cell.classList.remove("maze-cell-open");
+      cell.classList.add("maze-cell-path");
+      await pause(DELAY_MILLISECONDS);
+    }
   }
-
-  //marks the start of the path
-  let index = path[0][0] * numColumns + path[0][1];
-  const startCell = document.getElementById("cell-" + index);
-  startCell.classList.remove("open-cell");
-  startCell.classList.add("cell-start");
-
-  //marks the end of the path
-  index = path[path.length - 1][0] * numColumns + path[path.length - 1][1];
-  const endCell = document.getElementById("cell-" + index);
-  endCell.classList.remove("open-cell");
-  endCell.classList.add("cell-end");
 }
 
 /**
