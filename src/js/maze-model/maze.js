@@ -142,11 +142,11 @@ export default function Maze(grid, start, finish) {
    * @returns - a list containing the path from 'start' to 'finish'
    *          - an empty list if the maze is unsolvable
    */
-  this.solve = () => {
+  this.backtracking = () => {
     // store maze solution in path
     const path = [];
     const deepcopyGrid = JSON.parse(JSON.stringify(this._grid));
-    this.traverse(deepcopyGrid, this._start, path);
+    this.backgrackingStart(deepcopyGrid, this._start, path);
     return path;
   }
 
@@ -165,7 +165,7 @@ export default function Maze(grid, start, finish) {
    * @returns - true if finishing point is reached, indicating correct path
    *          - false if finishing point is not reached, indicating wrong path
    */
-  this.traverse = (grid, current, path) => {
+  this.backgrackingStart = (grid, current, path) => {
     let done = false;
     const row = current[0];
     const column = current[1];
@@ -183,10 +183,10 @@ export default function Maze(grid, start, finish) {
       path.unshift(current);
       return true; // arrived at finishing point
     } else {
-      if (!done) done = this.traverse(grid, [row - 1, column], path); // move up
-      if (!done) done = this.traverse(grid, [row, column - 1], path); // move left
-      if (!done) done = this.traverse(grid, [row + 1, column], path); // move down
-      if (!done) done = this.traverse(grid, [row, column + 1], path); // move right
+      if (!done) done = this.backgrackingStart(grid, [row - 1, column], path); // move up
+      if (!done) done = this.backgrackingStart(grid, [row, column - 1], path); // move left
+      if (!done) done = this.backgrackingStart(grid, [row + 1, column], path); // move down
+      if (!done) done = this.backgrackingStart(grid, [row, column + 1], path); // move right
     }
 
     if (done) path.unshift(current);

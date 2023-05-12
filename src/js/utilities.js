@@ -108,13 +108,36 @@ export const indicateStart = (numCellsWidth, numCellsHeight, start) => {
  * @param {Number} numCellsWidth 
  * @param {Number} numCellsHeight 
  * @param {Number[]} finish * modifying global variable
- * @returns 
+ * @returns index corresponding to the indicated coordinate for finish point.
  */
 export const indicateFinish = (numCellsWidth, numCellsHeight, finish) => {
   finish[0] = Math.floor(numCellsHeight / 2);
   finish[1] = Math.floor(numCellsWidth * 4 / 5);
   return finish[1] + finish[0] * numCellsWidth;
 };
+
+/**
+ * Determines the coordinate of a cell based on the index & grid width.
+ * @param {Number} index 
+ * @param {Number} numCellsWidth 
+ * @returns 1D list representing the cooordinate: [height, width].
+ */
+export const convertIndexToCoordinate = (index, numCellsWidth) => {
+  const coordinate = [];
+  coordinate.push(Math.floor(index / numCellsWidth));
+  coordinate.push(index % numCellsWidth);
+  return coordinate;
+}
+
+/**
+ * Determines the index of a cell based on the coordinate & grid width.
+ * @param {Number[]} coordinate 
+ * @param {Number} numCellsWidth 
+ * @returns integer representing the index within the grid
+ */
+export const convertCoordinateToIndex = (coordinate, numCellsWidth) => {
+  return coordinate[0] * numCellsWidth + coordinate[1];
+}
 
 /**
  * Clears the solution path after the maze is solved. The maze itself remains intact.

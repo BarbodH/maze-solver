@@ -104,15 +104,11 @@ label {
   background-color: #00003F;
 }
 
-.titlebar-link {
+.titlebar h1 {
   color: white;
   font-size: 20px;
+  font-weight: bold;
   margin: 20px 15px 20px 15px;
-  text-decoration: none;
-}
-
-.titlebar-link-inactive {
-  opacity: 0.5;
 }
 
 /* Buttons */
@@ -135,4 +131,9 @@ label {
 .button-solve {
   color: white;
   background-color: #4CAF50;
+}
+
+.button-assess {
+  color: white;
+  background-color: #3F00FF;
 }

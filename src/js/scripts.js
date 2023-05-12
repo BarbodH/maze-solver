@@ -1,5 +1,5 @@
-import Maze from "./maze-object/maze.js";
-import { setLinearGrid } from "./utilities.js";
+import Maze from "./maze-model/maze.js";
+import { convertCoordinateToIndex, convertIndexToCoordinate, setLinearGrid } from "./utilities.js";
 import { convertListToMatrix } from "./utilities.js";
 import { markPath } from "./utilities.js";
 import { clearPath } from "./utilities.js";
@@ -24,6 +24,7 @@ const visualizeContainerMaze = document.getElementById("visualize-container-maze
 const visualizeMaze = document.getElementById("visualize-maze");
 
 // menu
+const visualizeSelectAlgorithm = document.getElementById("visualize-select-algorithm");
 const visualizeButtonClearPath = document.getElementById("visualize-button-clear-path");
 const visualizeButtonClearMaze = document.getElementById("visualize-button-clear-maze");
 const visualizeButtonGenerateMaze = document.getElementById("visualize-button-generate-maze");
@@ -84,6 +85,43 @@ const setupMaze = () => {
         newCell.classList.add("maze-cell-open");
       }
     });
+    // double-click behaviour: (open -> start), (closed -> start), (start -> N/A), (finish -> N/A)
+    newCell.addEventListener("dblclick", () => {
+      if (!newCell.classList.contains("maze-cell-start") && !newCell.classList.contains("maze-cell-finish")) {
+        // mark the current cell as a starting point
+        newCell.classList.remove("maze-cell-open");
+        newCell.classList.remove("maze-cell-closed");
+        newCell.classList.add("maze-cell-start");
+        
+        // open the old start cell, since there can't be multiple starting points
+        let oldStartIndex = convertCoordinateToIndex(start, numCellsWidth);
+        let oldStartButton = document.getElementById(`cell-${oldStartIndex}`);
+        oldStartButton.classList.remove("maze-cell-start");
+        oldStartButton.classList.add("maze-cell-open");
+        // update the 'start' coordinate global variable
+        start = convertIndexToCoordinate(i, numCellsWidth);
+      }
+    });
+    // right-click behaviour: (open -> finish), (closed -> finish), (start -> N/A), (finish -> N/A)
+    newCell.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      
+      if (!newCell.classList.contains("maze-cell-start") && !newCell.classList.contains("maze-cell-finish")) {
+        // mark the current cell as a finish point
+        newCell.classList.remove("maze-cell-open");
+        newCell.classList.remove("maze-cell-closed");
+        newCell.classList.add("maze-cell-finish");
+
+        // open the old finish cell, since there can't be multiple finish points
+        let oldFinishIndex = convertCoordinateToIndex(finish, numCellsWidth);
+        let oldFinishButton = document.getElementById(`cell-${oldFinishIndex}`);
+        oldFinishButton.classList.remove("maze-cell-finish");
+        oldFinishButton.classList.add("maze-cell-open");
+        // update the 'finish' coordinate global variable
+        finish = convertIndexToCoordinate(i, numCellsWidth);
+      }
+    });
+
 
     visualizeMaze.appendChild(newCell);
   }
@@ -125,7 +163,11 @@ visualizeButtonSolve.addEventListener("click", () => {
   maze.setStart(start);
   maze.setFinish(finish);
 
-  const path = maze.solve();
+  // retrieve the selected algorithm value and solve accordingly
+  let selectedAlgorithm = visualizeSelectAlgorithm.value;
+  let path;
+  if (selectedAlgorithm === "backtracking") path = maze.backtracking();
+
   markPath(document, path, numCellsWidth);
 });
 
