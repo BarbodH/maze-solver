@@ -32,8 +32,10 @@ const MIME_TYPES = {
 
 const server = http.createServer((request, response) => {
   // find file path & extension to indicate an appropriate content type
-  let filePath = "." + request.url;
-  if (filePath == "./") filePath = "./index.html";
+  let filePath = "";
+  if (request.url === "/") filePath = "./src/html/index.html";
+  else filePath = `./src${request.url}`;
+
   let extname = path.extname(filePath).substring(1); // omit '.' extension prefix
   try {
     response.writeHead(200, { "Content-Type": MIME_TYPES[extname] });
