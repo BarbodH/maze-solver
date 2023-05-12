@@ -1,12 +1,12 @@
-import Maze from "./maze-solver/maze.js";
-import { setLinearGrid } from "./utilities/scripts-helpers.js";
-import { convertListToMatrix } from "./utilities/scripts-helpers.js";
-import { markPath } from "./utilities/scripts-helpers.js";
-import { clearPath } from "./utilities/scripts-helpers.js";
-import { clearMaze } from "./utilities/scripts-helpers.js";
-import { generateMaze } from "./utilities/scripts-helpers.js";
-import { indicateStart } from "./utilities/scripts-helpers.js";
-import { indicateFinish } from "./utilities/scripts-helpers.js";
+import Maze from "./maze-object/maze.js";
+import { setLinearGrid } from "./utilities.js";
+import { convertListToMatrix } from "./utilities.js";
+import { markPath } from "./utilities.js";
+import { clearPath } from "./utilities.js";
+import { clearMaze } from "./utilities.js";
+import { generateMaze } from "./utilities.js";
+import { indicateStart } from "./utilities.js";
+import { indicateFinish } from "./utilities.js";
 
 //////////////////// Element Initializations ////////////////////
 
