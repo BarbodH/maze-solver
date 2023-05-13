@@ -206,6 +206,8 @@ export default function Maze(grid, start, finish) {
     deepcopyGrid[this._start[0]][this._start[1]] = "v";
 
     do {
+      if (queue.length === 0) return [];
+
       currentPath = queue.shift();
       currentCoordinate = this.getCurrentCoordinate(currentPath);
 

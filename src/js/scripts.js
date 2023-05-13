@@ -122,7 +122,6 @@ const setupMaze = () => {
       }
     });
 
-
     visualizeMaze.appendChild(newCell);
   }
 }
@@ -171,7 +170,8 @@ visualizeButtonSolve.addEventListener("click", () => {
   if (selectedAlgorithm === "backtracking") path = maze.backtracking();
   else if (selectedAlgorithm === "bfs") path = maze.bfs();
 
-  markPath(document, path, numCellsWidth);
+  if (path && path.length > 0) markPath(document, path, numCellsWidth);
+  else alert("The maze is unsolvable!");
 });
 
 //////////////////// Page Load ////////////////////
