@@ -32,7 +32,7 @@ export const generateBarChart = (container, algorithms) => {
   
   svg
     .append("g")
-    .attr("fill", "royalblue")
+    .attr("fill", "#3F00FF")
     .selectAll("rect")
     .data(algorithms.sort((a, b) => d3.descending(a.pathLength, b.pathLength)))
     .join("rect")

@@ -53,7 +53,6 @@ label {
   padding: 8px 4px;
   background-color: #DCDCDC;
   color: black;
-  margin-top: 10px;
   border: 1px black solid;
   border-radius: 4px;
   font-size: 16px;
@@ -73,14 +72,13 @@ label {
   display: grid;
   grid-template-columns: repeat(var(--num-maze-columns), 1fr);
 }
+/* Maze Cells */
 
 .maze-cell {
   width: 25px;
   height: 25px;
   border: 1px solid #A9A9A9;
 }
-
-/* Maze Cells */
 
 .maze-cell-open {
   background-color: #F8F8FF;
@@ -96,6 +94,10 @@ label {
 
 .maze-cell-finish {
   background-color: #D70040;
+}
+
+.maze-cell-visited {
+  background-color: grey;
 }
 
 .maze-cell-path {
@@ -153,8 +155,8 @@ label {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
-  width: 600px;
-  height: 400px;
+  width: 650px;
+  height: 500px;
   overflow-y: auto;
   background-color: white;
   border: 1px solid black;
@@ -177,6 +179,10 @@ label {
 
 .popup .button-exit:hover {
   color: red;
+}
+
+.popup p {
+  text-align: justify;
 }
 
 .assess-checkbox {
