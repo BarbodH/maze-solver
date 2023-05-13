@@ -38,6 +38,7 @@ const assessButtonExit = document.getElementById("assess-button-exit");
 const assessButtonGenerateReport = document.getElementById("assess-button-generate-report");
 const assessCheckboxBacktracking = document.getElementById("assess-checkbox-backtracking");
 const assessCheckboxBfs = document.getElementById("assess-checkbox-bfs");
+const assessCheckboxDfs = document.getElementById("assess-checkbox-dfs");
 const assessChartContainer = document.getElementById("assess-chart-container");
 
 // arbitrary maze setup
@@ -201,6 +202,12 @@ assessButtonGenerateReport.addEventListener("click", async () => {
       pathLength: 0
     };
   }
+  if (assessCheckboxDfs.checked) {
+    algorithms["dfs"] = {
+      name: "Depth-First Search",
+      pathLength: 0
+    };
+  }
 
   if (Object.keys(algorithms).length === 0) {
     alert("No algorithm is selected!");
@@ -240,9 +247,11 @@ const solveMaze = async (algorithm, visualize) => {
   if (visualize) {
     if (algorithm === "backtracking") path = await maze.backtracking(document);
     else if (algorithm === "bfs") path = await maze.bfs(document);
+    else if (algorithm === "dfs") path = await maze.dfs(document);
   } else {
     if (algorithm === "backtracking") path = maze.backtracking();
     else if (algorithm === "bfs") path = maze.bfs();
+    else if (algorithm === "dfs") path = maze.dfs();
   }
 
   return path;
