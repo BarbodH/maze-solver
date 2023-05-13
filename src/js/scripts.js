@@ -163,11 +163,11 @@ visualizeButtonGenerateMaze.addEventListener("click", () => {
  * Event listener for the 'Solve' button.
  * Updates the <code>maze</code>, retrieves the solution, and marks the path on the maze.
  */
-visualizeButtonSolve.addEventListener("click", () => {
+visualizeButtonSolve.addEventListener("click", async () => {
   clearPath(document, numCells);
   
   let selectedAlgorithm = visualizeSelectAlgorithm.value;
-  let path = solveMaze(selectedAlgorithm);
+  let path = await solveMaze(selectedAlgorithm, true);
 
   if (path && path.length > 0) markPath(document, path, numCellsWidth);
   else alert("The maze is unsolvable!");
@@ -186,7 +186,7 @@ assessButtonExit.addEventListener("click", () => {
  * Event listener for the 'Generate Report' button.
  * Generates a bar chart using D3.js based on number of steps in paths.
  */
-assessButtonGenerateReport.addEventListener("click", () => {
+assessButtonGenerateReport.addEventListener("click", async () => {
   // determine which algorithms are selected by the user
   const algorithms = {};
   if (assessCheckboxBacktracking.checked) {
@@ -212,7 +212,7 @@ assessButtonGenerateReport.addEventListener("click", () => {
   let path;
   for (let key in algorithms) {
     if (algorithms.hasOwnProperty(key)) {
-      path = solveMaze(key);
+      path = await solveMaze(key, false);
       if (path && path.length > 0) algorithms[key].pathLength = path.length;
       else alert("The maze is unsolvable!");
     }
@@ -227,7 +227,7 @@ assessButtonGenerateReport.addEventListener("click", () => {
  * @param {String} algorithm 
  * @returns the path from start to finish using the given algorithm.
  */
-const solveMaze = (algorithm) => {
+const solveMaze = async (algorithm, visualize) => {
   // set up the maze
   let grid = setLinearGrid(document, numCells);
   grid = convertListToMatrix(grid, numCellsHeight, numCellsWidth);
@@ -237,9 +237,14 @@ const solveMaze = (algorithm) => {
 
   // solve the maze based on the desired algorithm
   let path;
-  if (algorithm === "backtracking") path = maze.backtracking();
-  else if (algorithm === "bfs") path = maze.bfs();
-  
+  if (visualize) {
+    if (algorithm === "backtracking") path = await maze.backtracking(document);
+    else if (algorithm === "bfs") path = await maze.bfs(document);
+  } else {
+    if (algorithm === "backtracking") path = maze.backtracking();
+    else if (algorithm === "bfs") path = maze.bfs();
+  }
+
   return path;
 }
 
