@@ -205,23 +205,51 @@ export default function Maze(grid, start, finish) {
   }
 
   /**
-   * Implements the breadth-first search (BFS) algorithm to solve the maze.
-   * @returns list of coordinates indicating the path from start to finish.
+   * Requests <code>_xfs</code> to solve the maze using breadth-first search (BFS).
+   * If the <code>document</code> parameter is provided, it requests <code>_xfs</code>
+   * to mark the visited cells as well.
+   * @param {Document} document
+   * @returns the path from start to finish, using BFS
    */
   this.bfs = async (document) => {
-    
-    const queue = [[[this._start[0], this._start[1]]]];
+    return this._xfs("bfs", document);
+  }
+
+  /**
+   * Requests <code>_xfs</code> to solve the maze using depth-first search (DFS).
+   * If the <code>document</code> parameter is provided, it requests <code>_xfs</code>
+   * to mark the visited cells as well.
+   * @param {*} document 
+   * @returns 
+   */
+  this.dfs = async (document) => {
+    return this._xfs("dfs", document);
+  }
+
+  /**
+   * Unifies the implementation of breadth-first search (BFS) and depth-first search (DFS).
+   * If the <code>document</code> parameter is provided, it will mark the visited cells.
+   * @param {String} type
+   * @param {Document} document
+   * @returns the path from start to finish, based on the request algorithm.
+   */
+  this._xfs = async (algorithm, document) => {
+    // memory will act as a stack/queue depending on the selected algorithm
+    // bfs -> stack: push() & shift()
+    // dfs -> queue: push() & pop()
+    const memory = [[[this._start[0], this._start[1]]]];
     let currentPath, currentCoordinate, visitedCell;
 
     const deepcopyGrid = JSON.parse(JSON.stringify(this._grid));
     deepcopyGrid[this._start[0]][this._start[1]] = "v";
 
     while (true) {
-      if (queue.length === 0) return [];
+      if (memory.length === 0) return [];
 
-      currentPath = queue.shift();
+      if (algorithm === "bfs") currentPath = memory.shift();
+      else if (algorithm === "dfs") currentPath = memory.pop();
+
       currentCoordinate = this.getCurrentCoordinate(currentPath);
-
       if (currentCoordinate[0] === this._finish[0] && currentCoordinate[1] === this._finish[1]) break;
 
       // move up
@@ -236,7 +264,7 @@ export default function Maze(grid, start, finish) {
           }
         }
 
-        queue.push(currentPath.concat([coordinateUp]));
+        memory.push(currentPath.concat([coordinateUp]));
       }
 
       // move left
@@ -251,7 +279,7 @@ export default function Maze(grid, start, finish) {
           }
         }
 
-        queue.push(currentPath.concat([coordinateLeft]));
+        memory.push(currentPath.concat([coordinateLeft]));
       }
 
       // move down
@@ -266,7 +294,7 @@ export default function Maze(grid, start, finish) {
           }
         }
 
-        queue.push(currentPath.concat([coordinateDown]));
+        memory.push(currentPath.concat([coordinateDown]));
       }
 
       // move right
@@ -281,12 +309,12 @@ export default function Maze(grid, start, finish) {
           }
         }
 
-        queue.push(currentPath.concat([coordinateRight]));
+        memory.push(currentPath.concat([coordinateRight]));
       }
     }
 
     return currentPath;
-  }
+  };
 
   /**
    * Helper method to determine whether a particular coordinate is within the grid.
