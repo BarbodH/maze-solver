@@ -97,7 +97,7 @@ label {
 }
 
 .maze-cell-visited {
-  background-color: grey;
+  background-color: #C0C0C0;
 }
 
 .maze-cell-path {
@@ -156,7 +156,7 @@ label {
   transform: translate(-50%, -50%);
   z-index: 9999;
   width: 650px;
-  height: 500px;
+  height: 510px;
   overflow-y: auto;
   background-color: white;
   border: 1px solid black;

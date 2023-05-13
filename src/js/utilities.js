@@ -67,12 +67,11 @@ export const convertListToMatrix = (list, numRows, numColumns) => {
  *       - there is no precondition checking for 'document'; the developer must ensure input validity
  */
 export const markPath = async (document, path, numColumns) => {
-  const DELAY_MILLISECONDS = 50;
+  const DELAY_MILLISECONDS = 10;
   for (let i = 0; i < path.length; i++) {
     let index = path[i][0] * numColumns + path[i][1];
     const cell = document.getElementById(`cell-${index}`);
     if (!cell.classList.contains("maze-cell-start") && !cell.classList.contains("maze-cell-finish")) {
-      cell.classList.remove("maze-cell-open");
       cell.classList.add("maze-cell-path");
       await pause(DELAY_MILLISECONDS);
     }
@@ -147,10 +146,8 @@ export const convertCoordinateToIndex = (coordinate, numCellsWidth) => {
 export const clearPath = (document, numCells) => {
   for (let i = 0; i < numCells; i++) {
     let currentCell = document.getElementById(`cell-${i}`);
-    if (currentCell.classList.contains("maze-cell-path")) {
-      currentCell.classList.remove("maze-cell-path");
-      currentCell.classList.add("maze-cell-open");
-    }
+    currentCell.classList.remove("maze-cell-visited");
+    currentCell.classList.remove("maze-cell-path");
   }
 };
 
@@ -165,7 +162,7 @@ export const clearMaze = (document, numCells) => {
     if (!currentCell.classList.contains("maze-cell-start") && !currentCell.classList.contains("maze-cell-finish")) {
       currentCell.classList.remove("maze-cell-closed");
       currentCell.classList.remove("maze-cell-path");
-      currentCell.classList.add("maze-cell-open");
+      currentCell.classList.remove("maze-cell-visited");
     }
   }
 };

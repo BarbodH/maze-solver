@@ -142,13 +142,15 @@ export default function Maze(grid, start, finish) {
    * @returns - a list containing the path from 'start' to 'finish'
    *          - an empty list if the maze is unsolvable
    */
-  this.backtracking = () => {
+  this.backtracking = async (document) => {
     // store maze solution in path
     const path = [];
     const deepcopyGrid = JSON.parse(JSON.stringify(this._grid));
-    this.backgrackingStart(deepcopyGrid, this._start, path);
+    await this.backgrackingStart(deepcopyGrid, this._start, path, document);
     return path;
   }
+
+  const DELAY_MILLISECONDS = 10; // TODO: add documentation
 
   /**
    * Maze solving algorithm using recursion and backtracking
@@ -165,7 +167,7 @@ export default function Maze(grid, start, finish) {
    * @returns - true if finishing point is reached, indicating correct path
    *          - false if finishing point is not reached, indicating wrong path
    */
-  this.backgrackingStart = (grid, current, path) => {
+  this.backgrackingStart = async (grid, current, path, document) => {
     let done = false;
     const row = current[0];
     const column = current[1];
@@ -176,17 +178,25 @@ export default function Maze(grid, start, finish) {
     || (grid[row][column] !== 0)) // cell should neither be blocked (1) nor visited ("v")
       return false;
     
-    grid[row][column] = "v"; // mark current cell as visited
+    // mark current cell as visited
+    grid[row][column] = "v";
+    if (document) {
+      let visitedCell = document.getElementById(`cell-${row * grid[0].length + column}`);
+      if (!visitedCell.classList.contains("maze-cell-start") && !visitedCell.classList.contains("maze-cell-finish")) {
+        visitedCell.classList.add("maze-cell-visited");
+        await pause(DELAY_MILLISECONDS);
+      }
+    }
     
     // start traversing
     if (row === this._finish[0] && column === this._finish[1]) {
       path.unshift(current);
       return true; // arrived at finishing point
     } else {
-      if (!done) done = this.backgrackingStart(grid, [row - 1, column], path); // move up
-      if (!done) done = this.backgrackingStart(grid, [row, column - 1], path); // move left
-      if (!done) done = this.backgrackingStart(grid, [row + 1, column], path); // move down
-      if (!done) done = this.backgrackingStart(grid, [row, column + 1], path); // move right
+      if (!done) done = await this.backgrackingStart(grid, [row - 1, column], path, document); // move up
+      if (!done) done = await this.backgrackingStart(grid, [row, column - 1], path, document); // move left
+      if (!done) done = await this.backgrackingStart(grid, [row + 1, column], path, document); // move down
+      if (!done) done = await this.backgrackingStart(grid, [row, column + 1], path, document); // move right
     }
 
     if (done) path.unshift(current);
@@ -198,55 +208,82 @@ export default function Maze(grid, start, finish) {
    * Implements the breadth-first search (BFS) algorithm to solve the maze.
    * @returns list of coordinates indicating the path from start to finish.
    */
-  this.bfs = () => {
+  this.bfs = async (document) => {
+    
     const queue = [[[this._start[0], this._start[1]]]];
-    let currentPath, currentCoordinate;
+    let currentPath, currentCoordinate, visitedCell;
 
     const deepcopyGrid = JSON.parse(JSON.stringify(this._grid));
     deepcopyGrid[this._start[0]][this._start[1]] = "v";
 
-    do {
+    while (true) {
       if (queue.length === 0) return [];
 
       currentPath = queue.shift();
       currentCoordinate = this.getCurrentCoordinate(currentPath);
 
+      if (currentCoordinate[0] === this._finish[0] && currentCoordinate[1] === this._finish[1]) break;
+
       // move up
       let coordinateUp = [currentCoordinate[0] - 1, currentCoordinate[1]];
-      if (this.validateCoordinate(coordinateUp)) {
-        if (this.getCell(deepcopyGrid, coordinateUp) === 0) {
-          deepcopyGrid[coordinateUp[0]][coordinateUp[1]] = "v";
-          queue.push(currentPath.concat([coordinateUp]));
+      if (this.validateCoordinate(coordinateUp) && this.getCell(deepcopyGrid, coordinateUp) === 0) {
+        deepcopyGrid[coordinateUp[0]][coordinateUp[1]] = "v";
+        if (document) {
+          visitedCell = document.getElementById(`cell-${coordinateUp[0] * deepcopyGrid[0].length + coordinateUp[1]}`);
+          if (!visitedCell.classList.contains("maze-cell-start") && !visitedCell.classList.contains("maze-cell-finish")) {
+            visitedCell.classList.add("maze-cell-visited");
+            await pause(DELAY_MILLISECONDS);
+          }
         }
+
+        queue.push(currentPath.concat([coordinateUp]));
       }
 
       // move left
       let coordinateLeft = [currentCoordinate[0], currentCoordinate[1] - 1];
-      if (this.validateCoordinate(coordinateLeft)) {
-        if (this.getCell(deepcopyGrid, coordinateLeft) === 0) {
-          deepcopyGrid[coordinateLeft[0]][coordinateLeft[1]] = "v";
-          queue.push(currentPath.concat([coordinateLeft]));
+      if (this.validateCoordinate(coordinateLeft) && this.getCell(deepcopyGrid, coordinateLeft) === 0) {
+        deepcopyGrid[coordinateLeft[0]][coordinateLeft[1]] = "v";
+        if (document) {
+          visitedCell = document.getElementById(`cell-${coordinateLeft[0] * deepcopyGrid[0].length + coordinateLeft[1]}`);
+          if (!visitedCell.classList.contains("maze-cell-start") && !visitedCell.classList.contains("maze-cell-finish")) {
+            visitedCell.classList.add("maze-cell-visited");
+            await pause(DELAY_MILLISECONDS);
+          }
         }
+
+        queue.push(currentPath.concat([coordinateLeft]));
       }
 
       // move down
       let coordinateDown = [currentCoordinate[0] + 1, currentCoordinate[1]];
-      if (this.validateCoordinate(coordinateDown)) {
-        if (this.getCell(deepcopyGrid, coordinateDown) === 0) {
-          deepcopyGrid[coordinateDown[0]][coordinateDown[1]] = "v";
-          queue.push(currentPath.concat([coordinateDown]));
+      if (this.validateCoordinate(coordinateDown) && this.getCell(deepcopyGrid, coordinateDown) === 0) {
+        deepcopyGrid[coordinateDown[0]][coordinateDown[1]] = "v";
+        if (document) {
+          visitedCell = document.getElementById(`cell-${coordinateDown[0] * deepcopyGrid[0].length + coordinateDown[1]}`);
+          if (!visitedCell.classList.contains("maze-cell-start") && !visitedCell.classList.contains("maze-cell-finish")) {
+            visitedCell.classList.add("maze-cell-visited");
+            await pause(DELAY_MILLISECONDS);
+          }
         }
+
+        queue.push(currentPath.concat([coordinateDown]));
       }
 
       // move right
       let coordinateRight = [currentCoordinate[0], currentCoordinate[1] + 1];
-      if (this.validateCoordinate(coordinateRight)) {
-        if (this.getCell(deepcopyGrid, coordinateRight) === 0) {
-          deepcopyGrid[coordinateRight[0]][coordinateRight[1]] = "v";
-          queue.push(currentPath.concat([coordinateRight]));
+      if (this.validateCoordinate(coordinateRight) && this.getCell(deepcopyGrid, coordinateRight) === 0) {
+        deepcopyGrid[coordinateRight[0]][coordinateRight[1]] = "v";
+        if (document) {
+          visitedCell = document.getElementById(`cell-${coordinateRight[0] * deepcopyGrid[0].length + coordinateRight[1]}`);
+          if (!visitedCell.classList.contains("maze-cell-start") && !visitedCell.classList.contains("maze-cell-finish")) {
+            visitedCell.classList.add("maze-cell-visited");
+            await pause(DELAY_MILLISECONDS);
+          }
         }
+
+        queue.push(currentPath.concat([coordinateRight]));
       }
-    } while (currentCoordinate[0] !== this._finish[0] || currentCoordinate[1] !== this._finish[1]);
+    }
 
     return currentPath;
   }
@@ -281,4 +318,13 @@ export default function Maze(grid, start, finish) {
   this.getCurrentCoordinate = (path) => {
     return path[path.length - 1];
   };
+
+  /**
+   * Helper function for to pause and create a sequential effect.
+   * @param {Number} delayMilliseconds 
+   * @returns promise which is resolved after the specified duration (delayMilliseconds).
+   */
+  const pause = (delayMilliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, delayMilliseconds));
+  }
 }
