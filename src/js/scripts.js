@@ -155,6 +155,8 @@ visualizeButtonGenerateMaze.addEventListener("click", () => {
  * Updates the <code>maze</code>, retrieves the solution, and marks the path on the maze.
  */
 visualizeButtonSolve.addEventListener("click", () => {
+  clearPath(document, numCells);
+  
   let grid = setLinearGrid(document, numCells); // obtain linear grid
   grid = convertListToMatrix(grid, numCellsHeight, numCellsWidth); // convert linear grid to matrix
   
@@ -167,6 +169,7 @@ visualizeButtonSolve.addEventListener("click", () => {
   let selectedAlgorithm = visualizeSelectAlgorithm.value;
   let path;
   if (selectedAlgorithm === "backtracking") path = maze.backtracking();
+  else if (selectedAlgorithm === "bfs") path = maze.bfs();
 
   markPath(document, path, numCellsWidth);
 });
