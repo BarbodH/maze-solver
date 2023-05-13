@@ -7,6 +7,7 @@ import { clearMaze } from "./utilities.js";
 import { generateMaze } from "./utilities.js";
 import { indicateStart } from "./utilities.js";
 import { indicateFinish } from "./utilities.js";
+import { generateBarChart } from "./visualization.js";
 
 //////////////////// Element Initializations ////////////////////
 
@@ -29,6 +30,15 @@ const visualizeButtonClearPath = document.getElementById("visualize-button-clear
 const visualizeButtonClearMaze = document.getElementById("visualize-button-clear-maze");
 const visualizeButtonGenerateMaze = document.getElementById("visualize-button-generate-maze");
 const visualizeButtonSolve = document.getElementById("visualize-button-solve");
+const visualizeButtonAssess = document.getElementById("visualize-button-assess");
+
+// assess
+const assessContainer = document.getElementById("assess-container");
+const assessButtonExit = document.getElementById("assess-button-exit");
+const assessButtonGenerateReport = document.getElementById("assess-button-generate-report");
+const assessCheckboxBacktracking = document.getElementById("assess-checkbox-backtracking");
+const assessCheckboxBfs = document.getElementById("assess-checkbox-bfs");
+const assessChartContainer = document.getElementById("assess-chart-container");
 
 // arbitrary maze setup
 let start = [0, 0];
@@ -156,23 +166,82 @@ visualizeButtonGenerateMaze.addEventListener("click", () => {
 visualizeButtonSolve.addEventListener("click", () => {
   clearPath(document, numCells);
   
-  let grid = setLinearGrid(document, numCells); // obtain linear grid
-  grid = convertListToMatrix(grid, numCellsHeight, numCellsWidth); // convert linear grid to matrix
-  
-  // update maze object
-  maze.setGrid(grid);
-  maze.setStart(start);
-  maze.setFinish(finish);
-
-  // retrieve the selected algorithm value and solve accordingly
   let selectedAlgorithm = visualizeSelectAlgorithm.value;
-  let path;
-  if (selectedAlgorithm === "backtracking") path = maze.backtracking();
-  else if (selectedAlgorithm === "bfs") path = maze.bfs();
+  let path = solveMaze(selectedAlgorithm);
 
   if (path && path.length > 0) markPath(document, path, numCellsWidth);
   else alert("The maze is unsolvable!");
 });
+
+/**
+ * Event listener for the performance report exit button.
+ */
+assessButtonExit.addEventListener("click", () => {
+  assessContainer.classList.add("hide");
+  const oldChart = document.getElementById("assess-chart");
+  oldChart.remove();
+});
+
+/**
+ * Event listener for the 'Generate Report' button.
+ * Generates a bar chart using D3.js based on number of steps in paths.
+ */
+assessButtonGenerateReport.addEventListener("click", () => {
+  // determine which algorithms are selected by the user
+  const algorithms = {};
+  if (assessCheckboxBacktracking.checked) {
+    algorithms["backtracking"] = {
+      name: "Recursive Backtracking",
+      pathLength: 0
+    };
+  }
+  if (assessCheckboxBfs.checked) {
+    algorithms["bfs"] = {
+      name: "Breadth-First Search",
+      pathLength: 0
+    };
+  }
+
+  if (Object.keys(algorithms).length === 0) {
+    alert("No algorithm is selected!");
+    return;
+  }
+  
+  // determine the path length for each algorithm
+  // prepare algorithms object to be handled by D3.js for visualization
+  let path;
+  for (let key in algorithms) {
+    if (algorithms.hasOwnProperty(key)) {
+      path = solveMaze(key);
+      if (path && path.length > 0) algorithms[key].pathLength = path.length;
+      else alert("The maze is unsolvable!");
+    }
+  }
+
+  generateBarChart(assessChartContainer, Object.values(algorithms));
+  assessContainer.classList.remove("hide");
+});
+
+/**
+ * Helper method for preparing <code>maze</code> to be solved.
+ * @param {String} algorithm 
+ * @returns the path from start to finish using the given algorithm.
+ */
+const solveMaze = (algorithm) => {
+  // set up the maze
+  let grid = setLinearGrid(document, numCells);
+  grid = convertListToMatrix(grid, numCellsHeight, numCellsWidth);
+  maze.setGrid(grid);
+  maze.setStart(start);
+  maze.setFinish(finish);
+
+  // solve the maze based on the desired algorithm
+  let path;
+  if (algorithm === "backtracking") path = maze.backtracking();
+  else if (algorithm === "bfs") path = maze.bfs();
+  
+  return path;
+}
 
 //////////////////// Page Load ////////////////////
 

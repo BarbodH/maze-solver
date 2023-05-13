@@ -6,15 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maze Solver</title>
   <link rel="stylesheet" href="../css/styles.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <script defer type="module" src="../js/scripts.js"></script>
 </head>
 <body>
+  <div class="popup hide" id="assess-container">
+    <div>
+      <h1>Performance Report</h1>
+      <button class="button-exit" id="assess-button-exit">&times;</button>
+    </div>
+    <div class="chart-container" id="assess-chart-container">
+      <div id="assess-chart"></div>
+    </div>
+  </div>
+
   <div class="container">
     <div class="menu-container-outer">
       <div class="titlebar">
         <h1>Solve Me!</h1>
       </div>
-      
       <div class="menu-container-inner">
         <label for="visualize-algorithms">Pathfinding Algorithm</label>
         <select name="visualize-algorithms" id="visualize-select-algorithm" class="select-algorithm">
@@ -26,8 +36,21 @@
         <button id="visualize-button-clear-maze" class="button">Clear Maze</button><br>
         <button id="visualize-button-generate-maze" class="button">Generate Maze</button><br>
         <button id="visualize-button-solve" class="button button-solve">Solve</button><br><br>
-
-        <button id="visualize-button-assess" class="button button-assess">Assess</button>
+        
+        <!-- Assess Algorithm(s) -->
+        <h2>Assess Algorithm(s)</h2>
+        <form id="form-assess">
+          <div class="assess-checkbox">
+            <input type="checkbox" name="backtracking" value="backtracking" id="assess-checkbox-backtracking">
+            <label for="backtracking">Recursive Backtracking</label>
+          </div>
+          <div class="assess-checkbox">
+            <input type="checkbox" name="bfs" value="bfs" id="assess-checkbox-bfs">
+            <label for="bfs">Breadth-First Search</label>
+          </div> 
+        </form>
+        <br>
+        <button id="assess-button-generate-report" class="button button-assess">Generate Report</button>
       </div>
     </div>
     <div id="visualize-container-maze" class="maze-container">

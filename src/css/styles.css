@@ -42,6 +42,13 @@ label {
   justify-content: center;
 }
 
+.menu-container-inner h2 {
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
 .select-algorithm {
   padding: 8px 4px;
   background-color: #DCDCDC;
@@ -106,7 +113,7 @@ label {
 
 .titlebar h1 {
   color: white;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
   margin: 20px 15px 20px 15px;
 }
@@ -136,4 +143,58 @@ label {
 .button-assess {
   color: white;
   background-color: #3F00FF;
+}
+
+/* Assess */
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: 600px;
+  height: 400px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 10px 0px 0px 10px;
+  padding: 0px 20px 0px 20px;
+  justify-content: center;
+}
+
+.popup .button-exit {
+  position: absolute;
+  border: none;
+  background: transparent;
+  top: 2.5px;
+  right: 2.5px;
+  font-size: 20px;
+  color: black;
+  cursor: pointer;
+  border-radius: 50px;
+}
+
+.popup .button-exit:hover {
+  color: red;
+}
+
+.assess-checkbox {
+  background-color: #DCDCDC;
+  color: black;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px black solid;
+  margin: 2px;
+  font-size: 16px;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-bar:hover {
+  opacity: 0.8;
 }
