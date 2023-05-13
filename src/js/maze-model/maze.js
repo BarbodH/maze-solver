@@ -194,4 +194,89 @@ export default function Maze(grid, start, finish) {
     return done;
   }
 
+  /**
+   * Implements the breadth-first search (BFS) algorithm to solve the maze.
+   * @returns list of coordinates indicating the path from start to finish.
+   */
+  this.bfs = () => {
+    const queue = [[[this._start[0], this._start[1]]]];
+    let currentPath, currentCoordinate;
+
+    const deepcopyGrid = JSON.parse(JSON.stringify(this._grid));
+    deepcopyGrid[this._start[0]][this._start[1]] = "v";
+
+    do {
+      currentPath = queue.shift();
+      currentCoordinate = this.getCurrentCoordinate(currentPath);
+
+      // move up
+      let coordinateUp = [currentCoordinate[0] - 1, currentCoordinate[1]];
+      if (this.validateCoordinate(coordinateUp)) {
+        if (this.getCell(deepcopyGrid, coordinateUp) === 0) {
+          deepcopyGrid[coordinateUp[0]][coordinateUp[1]] = "v";
+          queue.push(currentPath.concat([coordinateUp]));
+        }
+      }
+
+      // move left
+      let coordinateLeft = [currentCoordinate[0], currentCoordinate[1] - 1];
+      if (this.validateCoordinate(coordinateLeft)) {
+        if (this.getCell(deepcopyGrid, coordinateLeft) === 0) {
+          deepcopyGrid[coordinateLeft[0]][coordinateLeft[1]] = "v";
+          queue.push(currentPath.concat([coordinateLeft]));
+        }
+      }
+
+      // move down
+      let coordinateDown = [currentCoordinate[0] + 1, currentCoordinate[1]];
+      if (this.validateCoordinate(coordinateDown)) {
+        if (this.getCell(deepcopyGrid, coordinateDown) === 0) {
+          deepcopyGrid[coordinateDown[0]][coordinateDown[1]] = "v";
+          queue.push(currentPath.concat([coordinateDown]));
+        }
+      }
+
+      // move right
+      let coordinateRight = [currentCoordinate[0], currentCoordinate[1] + 1];
+      if (this.validateCoordinate(coordinateRight)) {
+        if (this.getCell(deepcopyGrid, coordinateRight) === 0) {
+          deepcopyGrid[coordinateRight[0]][coordinateRight[1]] = "v";
+          queue.push(currentPath.concat([coordinateRight]));
+        }
+      }
+    } while (currentCoordinate[0] !== this._finish[0] || currentCoordinate[1] !== this._finish[1]);
+
+    return currentPath;
+  }
+
+  /**
+   * Helper method to determine whether a particular coordinate is within the grid.
+   * @param {Number[]} coordinate 
+   * @returns a boolean indicating the validity of the coordinate.
+   */
+  this.validateCoordinate = (coordinate) => {
+    if (coordinate[0] < 0 || coordinate[0] >= this._grid.length
+      ||coordinate[1] < 0 || coordinate[1] >= this._grid[0].length)
+      return false;
+    return true;
+  };
+
+  /**
+   * Helper method to retrieve the value of a cell at a given valid coordinate.
+   * @param {Number[][]} grid 
+   * @param {Number[]} coordinate 
+   * @returns the value of the cell at the indicated coordinate.
+   */
+  this.getCell = (grid, coordinate) => {
+    return grid[coordinate[0]][coordinate[1]];
+  };
+
+  /**
+   * Helper method to retrieve the last coordinate of a given path.
+   * @param {Object[Number[]]} path 
+   * @returns the last (i.e., most current) coordinate of the given path.
+   */
+  this.getCurrentCoordinate = (path) => {
+    return path[path.length - 1];
+  };
 }
