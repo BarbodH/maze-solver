@@ -260,3 +260,34 @@ const solveMaze = async (algorithm, visualize) => {
 //////////////////// Page Load ////////////////////
 
 setupMaze();
+
+const connectCellObserver = (observer) => {
+  for (const cell of document.querySelectorAll(".maze-cell")) {
+    observer.observe(cell, { attributes: true, attributeFilter: ["class"] });
+  }
+}
+
+const cellObserver = new MutationObserver((mutationsList) => {
+  for (let mutation of mutationsList) {
+    if (mutation.type === "attributes") {
+      const mutatedCell = mutation.target;
+      if (mutatedCell.classList.contains("maze-cell-visited")) {
+        animateVisitedCell(mutatedCell);
+      }
+    }
+  }
+});
+
+connectCellObserver(cellObserver);
+
+const removeAnimationClass = async (cell) => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  cell.classList.remove("maze-cell-bounce-animation");
+};
+
+const animateVisitedCell = async (cell) => {
+  cellObserver.disconnect();
+  cell.classList.add("maze-cell-bounce-animation");
+  connectCellObserver(cellObserver);
+  removeAnimationClass(cell);
+};

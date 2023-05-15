@@ -186,3 +186,14 @@ export const generateMaze = (document, numCells) => {
     }
   }
 };
+
+/**
+ * Removes a given class from element asyncronously.
+ * @param {HTMLElement} element * modifying the UI
+ * @param {String} className 
+ * @param {Number} delay 
+ */
+export const removeClassDelayed = async (element, className, delay) => {
+  await new Promise((resolve) => setTimeout(resolve, delay));
+  element.classList.remove(className);
+};
