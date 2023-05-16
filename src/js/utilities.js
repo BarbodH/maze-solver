@@ -148,6 +148,7 @@ export const clearPath = (document, numCells) => {
     let currentCell = document.getElementById(`cell-${i}`);
     currentCell.classList.remove("maze-cell-visited");
     currentCell.classList.remove("maze-cell-path");
+    currentCell.classList.remove("maze-cell-bounce-animation");
   }
 };
 
@@ -163,6 +164,7 @@ export const clearMaze = (document, numCells) => {
       currentCell.classList.remove("maze-cell-closed");
       currentCell.classList.remove("maze-cell-path");
       currentCell.classList.remove("maze-cell-visited");
+      currentCell.classList.remove("maze-cell-bounce-animation");
     }
   }
 };
