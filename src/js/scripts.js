@@ -257,16 +257,13 @@ const solveMaze = async (algorithm, visualize) => {
   return path;
 }
 
-//////////////////// Page Load ////////////////////
+//////////////////// MutationObserver API ////////////////////
 
-setupMaze();
-
-const connectCellObserver = (observer) => {
-  for (const cell of document.querySelectorAll(".maze-cell")) {
-    observer.observe(cell, { attributes: true, attributeFilter: ["class"] });
-  }
-}
-
+/**
+ * MutationObserver class instantion.
+ * Upon mutation of a maze cell's class, it invokes the <code>animateVisitedCell</code> 
+ * to animate the visited path.
+ */
 const cellObserver = new MutationObserver((mutationsList) => {
   for (let mutation of mutationsList) {
     if (mutation.type === "attributes") {
@@ -278,16 +275,29 @@ const cellObserver = new MutationObserver((mutationsList) => {
   }
 });
 
-connectCellObserver(cellObserver);
+/**
+ * Adds an observer for all maze cells, indicated using the <code>maze-cell</code> class
+ * @param {MutationObserver} observer 
+ */
+const connectCellObserver = (observer) => {
+  for (const cell of document.querySelectorAll(".maze-cell")) {
+    observer.observe(cell, { attributes: true, attributeFilter: ["class"] });
+  }
+}
 
-const removeAnimationClass = async (cell) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  cell.classList.remove("maze-cell-bounce-animation");
-};
-
-const animateVisitedCell = async (cell) => {
+/**
+ * Adds <code>maze-cell-bounce-animation</code> class to the target cell, thus triggering
+ * a CSS animation.
+ * @param {HTMLElement} cell 
+ */
+const animateVisitedCell = (cell) => {
   cellObserver.disconnect();
   cell.classList.add("maze-cell-bounce-animation");
   connectCellObserver(cellObserver);
-  removeAnimationClass(cell);
 };
+
+//////////////////// Page Load ////////////////////
+
+setupMaze();
+
+connectCellObserver(cellObserver);
