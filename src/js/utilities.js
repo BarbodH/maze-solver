@@ -148,6 +148,7 @@ export const clearPath = (document, numCells) => {
     let currentCell = document.getElementById(`cell-${i}`);
     currentCell.classList.remove("maze-cell-visited");
     currentCell.classList.remove("maze-cell-path");
+    currentCell.classList.remove("maze-cell-bounce-animation");
   }
 };
 
@@ -163,6 +164,7 @@ export const clearMaze = (document, numCells) => {
       currentCell.classList.remove("maze-cell-closed");
       currentCell.classList.remove("maze-cell-path");
       currentCell.classList.remove("maze-cell-visited");
+      currentCell.classList.remove("maze-cell-bounce-animation");
     }
   }
 };
@@ -185,4 +187,15 @@ export const generateMaze = (document, numCells) => {
       }
     }
   }
+};
+
+/**
+ * Removes a given class from element asyncronously.
+ * @param {HTMLElement} element * modifying the UI
+ * @param {String} className 
+ * @param {Number} delay 
+ */
+export const removeClassDelayed = async (element, className, delay) => {
+  await new Promise((resolve) => setTimeout(resolve, delay));
+  element.classList.remove(className);
 };
