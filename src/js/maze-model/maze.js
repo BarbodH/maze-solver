@@ -248,13 +248,14 @@ export default function Maze(grid, start, finish) {
 
       if (algorithm === "bfs") currentPath = memory.shift();
       else if (algorithm === "dfs") currentPath = memory.pop();
+      else throw new Error("The provided algorithm must be either 'bfs' or 'dfs'!");
 
-      currentCoordinate = this.getCurrentCoordinate(currentPath);
+      currentCoordinate = this._getCurrentCoordinate(currentPath);
       if (currentCoordinate[0] === this._finish[0] && currentCoordinate[1] === this._finish[1]) break;
 
       // move up
       let coordinateUp = [currentCoordinate[0] - 1, currentCoordinate[1]];
-      if (this.validateCoordinate(coordinateUp) && this.getCell(deepcopyGrid, coordinateUp) === 0) {
+      if (this._validateCoordinate(coordinateUp) && this._getCell(deepcopyGrid, coordinateUp) === 0) {
         deepcopyGrid[coordinateUp[0]][coordinateUp[1]] = "v";
         if (document) {
           visitedCell = document.getElementById(`cell-${coordinateUp[0] * deepcopyGrid[0].length + coordinateUp[1]}`);
@@ -269,7 +270,7 @@ export default function Maze(grid, start, finish) {
 
       // move left
       let coordinateLeft = [currentCoordinate[0], currentCoordinate[1] - 1];
-      if (this.validateCoordinate(coordinateLeft) && this.getCell(deepcopyGrid, coordinateLeft) === 0) {
+      if (this._validateCoordinate(coordinateLeft) && this._getCell(deepcopyGrid, coordinateLeft) === 0) {
         deepcopyGrid[coordinateLeft[0]][coordinateLeft[1]] = "v";
         if (document) {
           visitedCell = document.getElementById(`cell-${coordinateLeft[0] * deepcopyGrid[0].length + coordinateLeft[1]}`);
@@ -284,7 +285,7 @@ export default function Maze(grid, start, finish) {
 
       // move down
       let coordinateDown = [currentCoordinate[0] + 1, currentCoordinate[1]];
-      if (this.validateCoordinate(coordinateDown) && this.getCell(deepcopyGrid, coordinateDown) === 0) {
+      if (this._validateCoordinate(coordinateDown) && this._getCell(deepcopyGrid, coordinateDown) === 0) {
         deepcopyGrid[coordinateDown[0]][coordinateDown[1]] = "v";
         if (document) {
           visitedCell = document.getElementById(`cell-${coordinateDown[0] * deepcopyGrid[0].length + coordinateDown[1]}`);
@@ -299,7 +300,7 @@ export default function Maze(grid, start, finish) {
 
       // move right
       let coordinateRight = [currentCoordinate[0], currentCoordinate[1] + 1];
-      if (this.validateCoordinate(coordinateRight) && this.getCell(deepcopyGrid, coordinateRight) === 0) {
+      if (this._validateCoordinate(coordinateRight) && this._getCell(deepcopyGrid, coordinateRight) === 0) {
         deepcopyGrid[coordinateRight[0]][coordinateRight[1]] = "v";
         if (document) {
           visitedCell = document.getElementById(`cell-${coordinateRight[0] * deepcopyGrid[0].length + coordinateRight[1]}`);
@@ -321,9 +322,9 @@ export default function Maze(grid, start, finish) {
    * @param {Number[]} coordinate 
    * @returns a boolean indicating the validity of the coordinate.
    */
-  this.validateCoordinate = (coordinate) => {
+  this._validateCoordinate = (coordinate) => {
     if (coordinate[0] < 0 || coordinate[0] >= this._grid.length
-      ||coordinate[1] < 0 || coordinate[1] >= this._grid[0].length)
+      || coordinate[1] < 0 || coordinate[1] >= this._grid[0].length)
       return false;
     return true;
   };
@@ -334,7 +335,7 @@ export default function Maze(grid, start, finish) {
    * @param {Number[]} coordinate 
    * @returns the value of the cell at the indicated coordinate.
    */
-  this.getCell = (grid, coordinate) => {
+  this._getCell = (grid, coordinate) => {
     return grid[coordinate[0]][coordinate[1]];
   };
 
@@ -343,7 +344,7 @@ export default function Maze(grid, start, finish) {
    * @param {Object[Number[]]} path 
    * @returns the last (i.e., most current) coordinate of the given path.
    */
-  this.getCurrentCoordinate = (path) => {
+  this._getCurrentCoordinate = (path) => {
     return path[path.length - 1];
   };
 
