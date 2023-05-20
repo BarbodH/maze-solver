@@ -203,9 +203,9 @@ test("Test accessor method - getFinish", () => {
   expect(maze.getFinish()).toBe(finish);
 });
 
-//////////////////// test cases for maze solving algorithm ////////////////////
+//////////////////// Test Cases for Maze Solving Algorithms' Helper Methods ////////////////////
 
-test("Test maze solving algorithm - solvable maze #1", () => {
+test("Test helper method - validateCoordinate #1", () => {
   const grid = [
     [0, 1, 1, 1, 1],
     [0, 0, 0, 0, 1],
@@ -216,7 +216,211 @@ test("Test maze solving algorithm - solvable maze #1", () => {
   const start = [0, 0];
   const finish = [4, 4];
   const maze = new Maze(grid, start, finish);
-  const path = maze.solve();
+  const coordinate = [-1, 3];
+  expect(maze._validateCoordinate(coordinate)).toBe(false);
+});
+
+test("Test helper method - validateCoordinate #2", () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const coordinate = [3, -1];
+  expect(maze._validateCoordinate(coordinate)).toBe(false);
+});
+
+test("Test helper method - validateCoordinate #3", () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const coordinate = [5, 3];
+  expect(maze._validateCoordinate(coordinate)).toBe(false);
+});
+
+test("Test helper method - validateCoordinate #4", () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const coordinate = [3, 5];
+  expect(maze._validateCoordinate(coordinate)).toBe(false);
+});
+
+test("Test helper method - validateCoordinate #5", () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const coordinate = [3, 2];
+  expect(maze._validateCoordinate(coordinate)).toBe(true);
+});
+
+test("Test helper method - getCell #1", () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const coordinate = [3, 2];
+  expect(maze._getCell(grid, coordinate)).toBe(0);
+});
+
+test("Test helper method - getCell #2", () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const coordinate = [4, 3];
+  expect(maze._getCell(grid, coordinate)).toBe(0);
+});
+
+test("Test helper method - getCell #3", () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const coordinate = [0, 4];
+  expect(maze._getCell(grid, coordinate)).toBe(1);
+});
+
+test("Test helper method - getCell #4", () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const coordinate = [2, 2];
+  expect(maze._getCell(grid, coordinate)).toBe(1);
+});
+
+test("Test helper method - getCurrentCoordinate #1", () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const path = [
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [2, 1],
+    [3, 1],
+    [3, 2]
+  ];
+  expect(maze._getCurrentCoordinate(path)).toEqual([3, 2]);
+});
+
+test("Test helper method - getCurrentCoordinate #", () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const path = [
+    [0, 0],
+    [0, 1],
+    [0, 2],
+    [1, 2],
+    [1, 3],
+    [1, 4],
+    [2, 4],
+    [2, 5],
+    [3, 5],
+    [3, 6],
+    [3, 7],
+    [3, 8],
+    [4, 8]
+  ];
+  expect(maze._getCurrentCoordinate(path)).toEqual([4, 8]);
+});
+
+test("Test helper method - xfs with invalid input", async () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  maze._xfs("invalid input").catch(error => {
+    expect(error.message).toBe("The provided algorithm must be either 'bfs' or 'dfs'!");
+  });
+});
+
+//////////////////// Test Cases for Maze Solving Algorithm: Recursive Backtracking ////////////////////
+
+test("Test maze solving algorithm (recursive backtracking) - solvable maze", async () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const path = await maze.backtracking();
   const solution = [
     [0, 0],
     [1, 0],
@@ -231,7 +435,7 @@ test("Test maze solving algorithm - solvable maze #1", () => {
   expect(path).toEqual(solution);
 });
 
-test("Test maze solving algorithm - unsolvable maze #1", () => {
+test("Test maze solving algorithm (recursive backtracking) - unsolvable maze", async () => {
   const grid = [
     [0, 1, 1, 1, 1],
     [1, 1, 0, 0, 1],
@@ -242,7 +446,177 @@ test("Test maze solving algorithm - unsolvable maze #1", () => {
   const start = [0, 0];
   const finish = [4, 4];
   const maze = new Maze(grid, start, finish);
-  const path = maze.solve();
+  const path = await maze.backtracking();
+  const solution = [];
+  expect(path).toEqual(solution);
+});
+
+//////////////////// Test Cases for Maze Solving Algorithm: Breadth-First Search (BFS) ////////////////////
+
+test("Test maze solving algorithm (breadth-first search) - solvable maze #1", async () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const path = await maze.bfs();
+  const solution = [
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [2, 1],
+    [3, 1],
+    [3, 2],
+    [3, 3],
+    [4, 3],
+    [4, 4]
+  ];
+  expect(path).toEqual(solution);
+});
+
+test("Test maze solving algorithm (breadth-first search) - solvable maze #2", async () => {
+  const grid = [
+    [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1, 0, 0, 1],
+    [0, 1, 1, 1, 0, 0, 1, 0, 0, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 1, 1, 0, 1, 0],
+    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0],
+    [0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [9, 9];
+  const maze = new Maze(grid, start, finish);
+  const path = await maze.bfs();
+  const solution = [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [3, 0],
+    [4, 0],
+    [5, 0],
+    [5, 1],
+    [6, 1],
+    [6, 2],
+    [6, 3],
+    [6, 4],
+    [7, 4],
+    [7, 5],
+    [7, 6],
+    [7, 7],
+    [8, 7],
+    [8, 8],
+    [9, 8],
+    [9, 9]
+  ];
+  expect(path).toEqual(solution);
+});
+
+test("Test maze solving algorithm (breadth-first search) - unsolvable maze", async () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [1, 1, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const path = await maze.bfs();
+  const solution = [];
+  expect(path).toEqual(solution);
+});
+
+//////////////////// Test Cases for Maze Solving Algorithm: Depth-First Search (DFS) ////////////////////
+
+test("Test maze solving algorithm (depth-first search) - solvable maze #1", async () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const path = await maze.dfs();
+  const solution = [
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [2, 1],
+    [3, 1],
+    [3, 2],
+    [3, 3],
+    [4, 3],
+    [4, 4]
+  ];
+  expect(path).toEqual(solution);
+});
+
+test("Test maze solving algorithm (depth-first search) - solvable maze #2", async () => {
+  const grid = [
+    [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1, 0, 0, 1],
+    [0, 1, 1, 1, 0, 0, 1, 0, 0, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 1, 1, 0, 1, 0],
+    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0],
+    [0, 1, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [9, 9];
+  const maze = new Maze(grid, start, finish);
+  const path = await maze.dfs();
+  const solution = [
+    [0, 0],
+    [0, 1],
+    [0, 2],
+    [1, 2],
+    [1, 3],
+    [1, 4],
+    [2, 4],
+    [2, 5],
+    [3, 5],
+    [3, 6],
+    [3, 7],
+    [3, 8],
+    [4, 8],
+    [4, 9],
+    [5, 9],
+    [6, 9],
+    [7, 9],
+    [8, 9],
+    [9, 9]
+  ];
+  expect(path).toEqual(solution);
+});
+
+test("Test maze solving algorithm (depth-first search) - unsolvable maze", async () => {
+  const grid = [
+    [0, 1, 1, 1, 1],
+    [1, 1, 0, 0, 1],
+    [1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0]
+  ];
+  const start = [0, 0];
+  const finish = [4, 4];
+  const maze = new Maze(grid, start, finish);
+  const path = await maze.dfs();
   const solution = [];
   expect(path).toEqual(solution);
 });
