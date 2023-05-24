@@ -26,6 +26,9 @@ Alternatively, any other tools for launching a localhost server, such as *Go Liv
 Note that the maze can only have one start and finish point.
 For the purpose of convenience, a custom maze can be generated using the **Generate Maze** button as well.
 
+**Page responsiveness**: the maze dimensions and initial start/finish points are set based on the window dimensions.
+Upon resizing the window, the page automatically reloads and the maze is reset accordingly.
+
 ## Testing
 
 Jest setup and configuration tutorial: [Install Jest Testing Framework with npm for ES6 module support - JavaScript Testing](https://www.youtube.com/watch?v=ZnIv8u2-XrA)

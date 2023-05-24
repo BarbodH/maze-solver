@@ -140,6 +140,14 @@ const setupMaze = () => {
 //////////////////// Event Listeners ////////////////////
 
 /**
+ * Event listener for re-adjusting the maze dimensions upon resizing the window.
+ * The page is reloaded when this function executes.
+ */
+window.addEventListener("resize", () => {
+  location.reload();
+});
+
+/**
  * Event listener for the 'Clear Path' button.
  */
 visualizeButtonClearPath.addEventListener("click", () => {
