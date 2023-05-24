@@ -143,6 +143,7 @@ const setupMaze = () => {
  * Event listener for the 'Clear Path' button.
  */
 visualizeButtonClearPath.addEventListener("click", () => {
+  if (maze.getSolvingState()) return;
   clearPath(document, numCells);
 });
 
@@ -150,6 +151,7 @@ visualizeButtonClearPath.addEventListener("click", () => {
  * Event listener for the 'Clear Maze' button
  */
 visualizeButtonClearMaze.addEventListener("click", () => {
+  if (maze.getSolvingState()) return;
   clearMaze(document, numCells);
 });
 
@@ -157,6 +159,7 @@ visualizeButtonClearMaze.addEventListener("click", () => {
  * Event listener for the 'Generate Maze' button
  */
 visualizeButtonGenerateMaze.addEventListener("click", () => {
+  if (maze.getSolvingState()) return;
   generateMaze(document, numCells);
 });
 
@@ -165,12 +168,17 @@ visualizeButtonGenerateMaze.addEventListener("click", () => {
  * Updates the <code>maze</code>, retrieves the solution, and marks the path on the maze.
  */
 visualizeButtonSolve.addEventListener("click", async () => {
+  if (maze.getSolvingState()) return;
+  maze.setSolvingState(true);
   clearPath(document, numCells);
   
   let selectedAlgorithm = visualizeSelectAlgorithm.value;
   let path = await solveMaze(selectedAlgorithm, true);
 
-  if (path && path.length > 0) markPath(document, path, numCellsWidth);
+  if (path && path.length > 0) {
+    await markPath(document, path, numCellsWidth);
+    maze.setSolvingState(false);
+  }
   else alert("The maze is unsolvable!");
 });
 

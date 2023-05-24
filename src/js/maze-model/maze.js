@@ -73,8 +73,21 @@ export default function Maze(grid, start, finish) {
   
   this._finish = this.validateFinish(finish);
 
+  this.validateSolvingState = (state) => {
+    if (typeof state !== "boolean") throw new Error("'state' must be a boolean!");
+    return state;
+  }
+
   //////////////////// Modifier Methods ////////////////////
   
+  /**
+   * Modifier method for the '_isSolving' property
+   * @param {boolean} state - boolean indicating whether the maze is currently being solved
+   */
+  this.setSolvingState = (state) => {
+    this._isSolving = this.validateSolvingState(state);
+  }
+
   /**
    * Modifier method for the maze grid
    * @param {object[]} grid - 2D maze grid with binary entries
@@ -111,7 +124,17 @@ export default function Maze(grid, start, finish) {
     this._finish = this.validateFinish(finish);
   }
 
+  let _isSolving = false;
+
   //////////////////// Accessor Method ////////////////////
+
+  /**
+   * Accessor method for '_isSolving' property
+   * @returns boolean, indicating whether the maze is currently being solved
+   */
+  this.getSolvingState = () => {
+    return this._isSolving;
+  }
 
   /**
    * Accessor method for '_grid' property
