@@ -6,6 +6,7 @@
 export const generateBarChart = (container, algorithms) => {
   // determine the largest pathLength; useful for setting the y-axis
   const maxPathLength = Math.max(...algorithms.map(obj => obj.pathLength));
+  const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
   const newChart = document.createElement("div");
   newChart.id = "assess-chart";
@@ -32,7 +33,6 @@ export const generateBarChart = (container, algorithms) => {
   
   svg
     .append("g")
-    .attr("fill", "#3F00FF")
     .selectAll("rect")
     .data(algorithms.sort((a, b) => d3.descending(a.pathLength, b.pathLength)))
     .join("rect")
@@ -40,7 +40,8 @@ export const generateBarChart = (container, algorithms) => {
       .attr("y", d => y(d.pathLength))
       .attr("height", d => y(0) - y(d.pathLength))
       .attr("width", x.bandwidth())
-      .attr("class", "chart-bar");
+      .attr("class", "chart-bar")
+      .attr("fill", (d, i) => colorScale(i));
 
   const xAxis = g => {
     g
@@ -52,7 +53,7 @@ export const generateBarChart = (container, algorithms) => {
   const yAxis = g => {
     g
     .attr("transform", `translate(${margin.left}, 0)`)
-    .call(d3.axisLeft(y).ticks(null, algorithms.format))
+    .call(d3.axisLeft(y).ticks(5).tickSizeInner(margin.left + margin.right - width))
     .attr("font-size", "14px");
   };
 

@@ -204,6 +204,9 @@ assessButtonExit.addEventListener("click", () => {
  * Generates a bar chart using D3.js based on number of steps in paths.
  */
 assessButtonGenerateReport.addEventListener("click", async () => {
+  const oldChart = document.getElementById("assess-chart");
+  oldChart.remove();
+  
   // determine which algorithms are selected by the user
   const algorithms = {};
   if (assessCheckboxBacktracking.checked) {
