@@ -36,9 +36,9 @@
         <!-- Visualize Algorithm -->
         <h2>Visualize Algorithm</h2>
         <select name="visualize-algorithms" id="visualize-select-algorithm" class="select-algorithm">
-          <option value="backtracking">Recursive Backtracking</option>
           <option value="bfs">Breadth-First Search</option>
           <option value="dfs">Depth-First Search</option>
+          <option value="backtracking">Recursive Backtracking</option>
         </select><br><br>
   
         <button id="visualize-button-clear-path" class="button">Clear Path</button><br>
@@ -50,17 +50,17 @@
         <h2>Assess Algorithm(s)</h2>
         <form id="form-assess">
           <div class="assess-checkbox">
-            <input type="checkbox" name="backtracking" value="backtracking" id="assess-checkbox-backtracking">
-            <label for="backtracking">Recursive Backtracking</label>
-          </div>
-          <div class="assess-checkbox">
             <input type="checkbox" name="bfs" value="bfs" id="assess-checkbox-bfs">
-            <label for="bfs">Breadth-First Search</label>
+            <label for="assess-checkbox-bfs">Breadth-First Search</label>
           </div>
           <div class="assess-checkbox">
             <input type="checkbox" name="dfs" value="dfs" id="assess-checkbox-dfs">
-            <label for="dfs">Depth-First Search</label>
-          </div> 
+            <label for="assess-checkbox-dfs">Depth-First Search</label>
+          </div>
+          <div class="assess-checkbox">
+            <input type="checkbox" name="backtracking" value="backtracking" id="assess-checkbox-backtracking">
+            <label for="assess-checkbox-backtracking">Recursive Backtracking</label>
+          </div>
         </form>
         <br>
         <button id="assess-button-generate-report" class="button button-assess">Generate Report</button>

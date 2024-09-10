@@ -41,15 +41,6 @@ npm test
 
 ## Algorithms
 
-### Recursive Backtracking
-
-This function is the first-ever pathfinding algorithm that I implemented without prior knowledge of data structures and algorithms.
-It is inefficient, especially for mazes with trivial solutions.
-Nevertheless, it is a fantastic demonstration of the importance of learning data structures and algorithms for programmers in order to develop efficient solutions.
-
-[<img src="/images/backtracking-sample.png" align="center" height="400" hspace="2" vspace="2">](/images/backtracking-sample.png")
-<br>*Sample run of recursive backtracking*
-
 ### Breath-First Search (BFS)
 
 This function is a custom implementation of the well-known BFS graph traversal algorithm.
@@ -71,7 +62,16 @@ Upon visiting a new node, all the neighbouring nodes of its neighbouring nodes a
 [<img src="/images/dfs-sample.png" align="center" height="400" hspace="2" vspace="2">](/images/dfs-sample.png")
 <br>*Sample run of depth-first search (DFS)*
 
-### Assessment
+### Recursive Backtracking
+
+This function is the first-ever pathfinding algorithm that I implemented without prior knowledge of data structures and algorithms.
+It is inefficient, especially for mazes with trivial solutions.
+Nevertheless, it is a fantastic demonstration of the importance of learning data structures and algorithms for programmers in order to develop efficient solutions.
+
+[<img src="/images/backtracking-sample.png" align="center" height="400" hspace="2" vspace="2">](/images/backtracking-sample.png")
+<br>*Sample run of recursive backtracking*
+
+## Assessment
 
 The D3.js data visualization library was utilized to create a bar chart, displaying the path length of the selected algorithm(s) for a given maze.
 
