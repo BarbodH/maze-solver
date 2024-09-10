@@ -1,4 +1,4 @@
-import Maze from './maze';
+import Maze from './maze.js';
 
 //////////////////// test cases for validateStart ////////////////////
 
